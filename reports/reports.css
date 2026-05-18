@@ -1,1 +1,613 @@
+/* ==================== Reports Page Styles – Matching Pakka/Kacha Design ==================== */
+/* Developed by Arshdeep Singh – DairyCare Pro */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gurmukhi:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Same color palette as Pakka/Kacha */
+    --primary: #2a9d8f;
+    --primary-light: #4ecdc4;
+    --primary-dark: #21867a;
+    --primary-soft: #e8f5f3;
+    --secondary: #ffb74d;
+    --secondary-light: #ffe0b2;
+    --accent: #6c63ff;
+    --success: #66bb6a;
+    --danger: #f44336;
+    --warning: #ffa726;
+
+    --dark: #2d3436;
+    --darker: #1e272e;
+    --gray-800: #485460;
+    --gray-600: #808e9b;
+    --gray-400: #b2bec3;
+    --gray-200: #dfe6e9;
+    --gray-100: #f5f7fa;
+    --light: #fafbfc;
+    --white: #ffffff;
+
+    --glass-bg: rgba(255, 255, 255, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --glass-blur: blur(12px);
+
+    --gradient-primary: linear-gradient(135deg, #2a9d8f 0%, #4ecdc4 100%);
+    --gradient-secondary: linear-gradient(135deg, #ffb74d 0%, #ffe0b2 100%);
+    --gradient-accent: linear-gradient(135deg, #6c63ff 0%, #8f8aff 100%);
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+    --shadow-hover: 0 12px 40px rgba(42, 157, 143, 0.2);
+
+    --radius-sm: 12px;
+    --radius-md: 18px;
+    --radius-lg: 24px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* Dark theme – same as Pakka/Kacha dark mode */
+body.dark-theme {
+    --primary: #40916c;
+    --primary-light: #52b788;
+    --primary-dark: #2d6a4f;
+    --primary-soft: #1e3a2f;
+    --dark: #f1f5f9;
+    --gray-800: #e2e8f0;
+    --gray-600: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-200: #334155;
+    --gray-100: #1e293b;
+    --white: #0f172a;
+    background: #0f172a;
+    color: #f1f5f9;
+}
+
+/* ==================== BASE BODY & LAYOUT FIX ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Noto Sans Gurmukhi', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(145deg, #f0fdf4 0%, #dcfce7 100%);
+    color: var(--dark);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    transition: background 0.3s, color 0.3s;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 0;
+}
+
+main {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+/* Typography */
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2d6a4f;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    letter-spacing: -0.02em;
+    position: relative;
+    display: block;
+}
+
+.page-title::after {
+    display: none;
+}
+
+.subtitle {
+    text-align: center;
+    color: #475569;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    font-weight: 400;
+}
+
+/* Cards – same glass style as Pakka/Kacha */
+.card {
+    background: var(--white);
+    backdrop-filter: none;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-xl);
+    padding: 1.5rem 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    border-color: #2d6a4f;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+    border-left: 5px solid var(--primary);
+    padding-left: 1rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.8rem;
+}
+
+/* Summary Cards – same as summary-item in kacha */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.summary-item {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 1.2rem;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-fast);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.summary-item:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: var(--shadow-md);
+}
+
+.summary-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.summary-label {
+    font-size: 0.9rem;
+    color: var(--gray-600);
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+
+.summary-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+/* Filters */
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-weight: 500;
+    color: var(--gray-800);
+}
+
+.date-range {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.date-range input {
+    flex: 1;
+    min-width: 120px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    border: 2px solid rgba(42, 157, 143, 0.2);
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    transition: var(--transition-fast);
+}
+
+.form-control:hover {
+    border-color: var(--primary-light);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.2);
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+    padding: 0.8rem 1.2rem;
+    border-radius: var(--radius-md);
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--gray-800);
+    transition: var(--transition-fast);
+}
+
+.checkbox-group label:hover {
+    color: var(--primary);
+}
+
+.filter-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+/* Buttons – same as Pakka/Kacha */
+.btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(42, 157, 143, 0.4);
+}
+
+.btn-secondary {
+    background: var(--white);
+    color: var(--primary-dark);
+    border: 2px solid var(--primary-light);
+}
+
+.btn-secondary:hover {
+    background: var(--primary-soft);
+    transform: translateY(-2px);
+}
+
+.btn-sm {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+}
+
+/* Charts Section */
+.charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-card {
+    padding: 1rem;
+}
+
+.chart-card canvas {
+    max-height: 250px;
+    width: 100% !important;
+}
+
+/* Table – matches Pakka/Kacha table */
+.entries-card {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.8rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.table td {
+    padding: 0.8rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.table tbody tr:hover {
+    background: var(--primary-soft);
+}
+
+/* Detailed Reports Grid */
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.report-box {
+    background: var(--gray-100);
+    padding: 1.2rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+    transition: var(--transition-fast);
+}
+
+.report-box:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.report-content p {
+    margin: 0.3rem 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Analytics Grid */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.analytics-item {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 1rem;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-fast);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.analytics-item:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: var(--shadow-md);
+}
+
+.analytics-label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.analytics-value {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+/* Advanced Features Grid */
+.advanced-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.feature-box {
+    background: var(--gray-100);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    transition: var(--transition-fast);
+}
+
+.feature-box:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+/* Developer Credit */
+.developer-credit {
+    text-align: center;
+    color: var(--gray-600);
+    font-size: 0.9rem;
+    padding: 1rem 0;
+}
+
+/* Responsive – same as Pakka/Kacha */
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .charts-section {
+        grid-template-columns: 1fr;
+    }
+
+    .reports-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .advanced-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .filter-actions {
+        flex-direction: column;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* ==================== Mobile Table Fix ==================== */
+@media (max-width: 768px) {
+    .entries-card {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table {
+        font-size: 12px;
+        min-width: 500px;
+        /* force horizontal scroll */
+    }
+
+    .table th,
+    .table td {
+        padding: 6px 4px;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .table {
+        font-size: 10px;
+    }
+}
+
+.entries-card .table-responsive {
+    display: none;
+}
+
+.entries-card .table-responsive.show {
+    display: block;
+}
+
+/* Force header and footer visibility */
+#header-placeholder .site-header {
+    background: #2d6a4f !important;
+    color: white !important;
+    display: block !important;
+    padding: 0.5rem 0 !important;
+}
+
+#header-placeholder .site-header a,
+#header-placeholder .site-header .logo-text,
+#header-placeholder .site-header .version-text {
+    color: white !important;
+}
+
+#footer-placeholder .site-footer {
+    background: #1e293b !important;
+    color: #cbd5e1 !important;
+    display: block !important;
+    padding: 1.5rem 0 !important;
+    margin-top: 2rem !important;
+    text-align: center !important;
+}
+
+#footer-placeholder .site-footer a {
+    color: #a7f3d0 !important;
+}
+
+#footer-placeholder .btn {
+    background: #2a9d8f !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 40px !important;
+    padding: 0.7rem 1.5rem !important;
+    margin-top: 8px !important;
+    display: inline-block !important;
+}
