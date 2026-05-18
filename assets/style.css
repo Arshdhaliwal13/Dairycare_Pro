@@ -1,1 +1,248 @@
+/* assets/style.css - Mobile Friendly for Android & iOS */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(145deg, #f0fdf4 0%, #dcfce7 100%);
+    color: #1e293b;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
+    /* iOS text size fix */
+    text-size-adjust: 100%;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 0;
+}
+
+/* Header */
+.site-header {
+    background: linear-gradient(135deg, #2d6a4f, #40916c);
+    color: white;
+    padding: 0.5rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-text {
+    font-size: 1.2rem;
+}
+
+/* Main */
+main {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+.page-title {
+    font-size: 2rem;
+    color: #2d6a4f;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    color: #475569;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+/* Loading Shimmer Effect */
+.loading .card {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Cards Grid */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.card {
+    background: white;
+    border-radius: 24px;
+    padding: 1.5rem 1rem;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    /* Ensure touch target size */
+    min-height: 48px;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    border-color: #2d6a4f;
+}
+
+.card-icon {
+    font-size: 3.2rem;
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2d6a4f;
+}
+
+.card-desc {
+    font-size: 1.05rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.card-badge {
+    background: #e9f5ef;
+    color: #2d6a4f;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+/* Footer */
+.site-footer {
+    background: #1e293b;
+    color: #cbd5e1;
+    border-top: 3px solid #2d6a4f;
+    text-align: center;
+    padding: 1.5rem 0;
+    margin-top: 2rem;
+}
+
+.site-footer a {
+    color: #a7f3d0;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 8px 12px;
+    margin-top: -10px;
+    margin-right: -10px;
+    line-height: 1;
+}
+
+.close:hover {
+    color: red;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .cards-grid {
+        grid-template-columns: 1fr;
+        /* ਇੱਕ ਕਾਲਮ ਵਿੱਚ ਕਾਰਡ */
+        gap: 1rem;
+    }
+
+    .card {
+        padding: 22px 18px;
+    }
+
+    .card-icon {
+        font-size: 3.5rem;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+    }
+
+    .card-desc {
+        font-size: 1rem;
+    }
+}
+
+.version-badge {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    font-weight: normal;
+}
+
+.version-text {
+    color: white;
+    font-family: monospace;
+}
