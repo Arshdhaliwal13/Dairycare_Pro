@@ -1,1 +1,117 @@
+/* ==================== 2026 Trending Marquee ==================== */
+.ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 100%);
+    color: white;
+    padding: 0.8rem 0;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-top: 2px solid #facc15;
+    border-bottom: 2px solid #facc15;
+}
 
+/* Gradient fade on edges (modern ticker effect) */
+.ticker-wrap::before,
+.ticker-wrap::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.ticker-wrap::before {
+    left: 0;
+    background: linear-gradient(to right, #1e3a8a, transparent);
+}
+
+.ticker-wrap::after {
+    right: 0;
+    background: linear-gradient(to left, #2563eb, transparent);
+}
+
+.ticker {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: ticker 40s linear infinite;
+    will-change: transform;
+}
+
+.ticker:hover {
+    animation-play-state: paused;
+}
+
+.ticker__item {
+    display: inline-block;
+    padding: 0 2rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border-right: 2px solid rgba(255, 255, 255, 0.3);
+    line-height: 1.6;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.ticker__item:last-child {
+    border-right: none;
+}
+
+/* Animation */
+@keyframes ticker {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+
+    .ticker-wrap::before,
+    .ticker-wrap::after {
+        width: 40px;
+    }
+
+    .ticker__item {
+        font-size: 1rem;
+        padding: 0 1.5rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .ticker__item {
+        font-size: 0.9rem;
+        padding: 0 1rem;
+    }
+}
+
+/* Accessibility: reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    .ticker {
+        animation: none;
+        white-space: normal;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 100%);
+    }
+
+    .ticker__item {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .ticker-wrap::before,
+    .ticker-wrap::after {
+        display: none;
+    }
+}
