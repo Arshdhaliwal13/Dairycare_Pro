@@ -66,3 +66,17 @@ function navigateRoot(pageName) {
     
     window.location.href = basePath + pageName;
 }
+
+// Global navigation functions (for footer links)
+window.getAppBasePath = function() {
+    const isGH = window.location.hostname.includes('github.io');
+    return isGH ? '/DairyCare_Pro' : '';
+};
+
+window.navigateLegal = function(page) {
+    window.location.href = window.getAppBasePath() + '/legal/' + page;
+};
+
+window.navigateRoot = function(page) {
+    window.location.href = window.getAppBasePath() + '/' + page;
+};
