@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="google" content="notranslate">
+    <title>ਕੱਚਾ ਹਿਸਾਬ - DairyCare Pro</title>
+    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="kacha_style.css">
+    <!-- jsPDF, autoTable, html2canvas for PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+
+<body class="kacha-page">
+    <!-- Header loaded from component -->
+    <div id="header-placeholder"></div>
+
+    <main class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1 class="page-title">⚡ ਕੱਚਾ ਹਿਸਾਬ </h1>
+            <button id="settingsBtn" class="btn btn-sm"
+                style="background: transparent; border: none; font-size: 2rem; padding: 0.5rem; line-height: 1;"
+                onclick="openSettingsModal()">⚙️</button>
+        </div>
+
+        <!-- Entry Form Card -->
+        <div class="card entry-card">
+            <h2>📝 ਨਵੀਂ ਐਂਟਰੀ</h2>
+
+            <!-- Farmer Name Display (Marquee) -->
+            <div class="marquee-container">
+                <marquee id="farmerMarquee" behavior="scroll" direction="left">ਸੈਟਿੰਗ ਵਿਚ ਜਾ ਕੇ ਸਹੀ ਜਾਣਕਾਰੀ ਭਰੋ
+                </marquee>
+            </div>
+
+            <div class="form-row">
+                <!-- Date - Custom DD/MM/YYYY with Calendar -->
+                <div class="form-group">
+                    <label for="entryDate">📅 ਤਾਰੀਖ਼</label>
+                    <input type="date" id="entryDate" class="form-control">
+                    <small class="text-muted">(ਕੈਲੰਡਰ ਤੇ ਕਲਿਕ ਕਰਕੇ ਤਾਰੀਖ਼ ਚੁਣੋ)</small>
+                </div>
+
+                <!-- Farmer Name -->
+                <div class="form-group">
+                    <label for="farmerName">ਸੈਟਿੰਗ ਵਿਚ ਜਾ ਕੇ ਸਹੀ ਜਾਣਕਾਰੀ ਭਰੋ (English, mandatory)</label>
+                    <input type="text" id="farmerName" class="form-control" placeholder="ਜਿਵੇਂ: Arshdeep Singh"
+                        autocomplete="off" required readonly>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <!-- Animal Type -->
+                <div class="form-group">
+                    <label>🐄 ਪਸ਼ੂ ਦੀ ਕਿਸਮ</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="animalType" value="buffalo" checked> ਮੱਝ (Buffalo)</label>
+                        <label><input type="radio" name="animalType" value="cow"> ਗਾਂ (Cow)</label>
+                    </div>
+                </div>
+
+                <!-- Shift Selection -->
+                <div class="form-group">
+                    <label>🌞/🌙 ਸ਼ਿਫਟ (ਚੁਣੋ)</label>
+                    <div class="radio-group" style="margin-bottom: 0.5rem;">
+                        <label><input type="radio" name="shiftChoice" value="morning"> ਸਵੇਰ (Morning)</label>
+                        <label><input type="radio" name="shiftChoice" value="evening"> ਸ਼ਾਮ (Evening)</label>
+                    </div>
+                    <input type="text" id="shiftDisplay" class="form-control" readonly placeholder="ਚੁਣੀ ਹੋਈ ਸ਼ਿਫਟ">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <!-- Milk (liters) -->
+                <div class="form-group">
+                    <label for="milkLiter">🥛 ਦੁੱਧ (ਲੀਟਰ)</label>
+                    <input type="number" id="milkLiter" class="form-control" step="0.01" min="0"
+                        placeholder="ਜਿਵੇਂ: 12.5">
+                </div>
+
+                <!-- Rate Type Toggle -->
+                <div class="form-group rate-type">
+                    <label>💰 ਰੇਟ ਦੀ ਕਿਸਮ</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="rateType" value="fixed" checked> ਫਿਕਸ</label>
+                        <label><input type="radio" name="rateType" value="fat"> ਫੈਟ</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fixed Rate Row (values will be set from settings, disabled) -->
+            <div class="form-row" id="fixedRateRow">
+                <div class="form-group">
+                    <label for="fixedRate">₹ ਫਿਕਸ ਰੇਟ (ਪ੍ਰਤੀ ਲੀਟਰ)</label>
+                    <input type="number" id="fixedRate" class="form-control" step="0.01" min="0" disabled>
+                </div>
+            </div>
+
+            <!-- Fat Rate Row (hidden by default) -->
+            <div class="form-row" id="fatRateRow" style="display: none;">
+                <div class="form-group">
+                    <label for="fatPercent">🥛 ਫੈਟ %</label>
+                    <input type="number" id="fatPercent" class="form-control" step="0.1" min="0" max="10"
+                        placeholder="ਜਿਵੇਂ: 6.5">
+                </div>
+                <div class="form-group">
+                    <label for="fatRatePerFat">💰 ਪ੍ਰਤੀ ਫੈਟ ਰੇਟ (₹)</label>
+                    <input type="number" id="fatRatePerFat" class="form-control" step="0.01" min="0" disabled>
+                </div>
+            </div>
+
+            <!-- Total Amount -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>💰 ਕੁੱਲ ਰਕਮ</label>
+                    <input type="text" id="totalAmount" class="form-control" readonly placeholder="ਆਟੋ ਕੈਲਕੂਲੇਟ">
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button id="saveEntryBtn" class="btn btn-primary">💾 ਐਂਟਰੀ ਸੇਵ ਕਰੋ (Enter)</button>
+                <button id="clearFormBtn" class="btn btn-secondary">🔄 ਫਾਰਮ ਸਾਫ਼ ਕਰੋ</button>
+            </div>
+        </div>
+
+        <!-- Running Totals Card -->
+        <div class="card summary-card">
+            <h2>📊 ਹੁਣ ਤੱਕ ਦਾ ਕੁੱਲ</h2>
+            <div class="summary-grid" id="runningTotals">
+                <div class="summary-item">
+                    <span class="summary-label">ਕੁੱਲ ਦੁੱਧ</span>
+                    <span id="totalMilk" class="summary-value">0.00 L</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">ਕੁੱਲ ਕਮਾਈ</span>
+                    <span id="totalIncome" class="summary-value">₹0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PDF Filter Card -->
+        <div class="card">
+            <h2>📄 PDF ਰਿਪੋਰਟ</h2>
+            <div class="pdf-box">
+                <label>ਤਾਰੀਖ਼ ਰੇਂਜ:</label>
+                <select id="pdfDateRange" class="form-control">
+                    <option value="all">ਸਾਰੀਆਂ </option>
+                    <option value="custom">ਹੋਰ (ਚੁਣੋ)</option>
+                </select>
+                <div id="customDateRange" style="display: none;">
+                    <input type="date" id="pdfStartDate"> to <input type="date" id="pdfEndDate">
+                </div>
+                <label>ਪਸ਼ੂ ਕਿਸਮ:</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="includeBuffalo" checked> ਮੱਝ</label>
+                    <label><input type="checkbox" id="includeCow" checked> ਗਾਂ</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Entries Table Card -->
+        <div class="card entries-card">
+            <h2>📋 ਐਂਟਰੀਆਂ</h2>
+
+            <!-- PDF Download Button -->
+            <div style="text-align: center; margin: 20px 0;">
+                <button id="downloadPdfBtn" class="btn btn-primary">📄 PDF ਡਾਊਨਲੋਡ ਕਰੋ</button>
+            </div>
+
+            <div class="table-responsive">
+                <table id="entriesTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>ਤਾਰੀਖ਼</th>
+                            <th>ਸ਼ਿਫਟ</th>
+                            <th>ਦੁੱਧ (L)</th>
+                            <th>ਰੇਟ (₹)</th>
+                            <th>ਕੁੱਲ (₹)</th>
+                            <th>ਸਹੀ ਕਰੋ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="entriesBody">
+                        <tr>
+                            <td colspan="6" class="text-center">ਕੋਈ ਐਂਟਰੀ ਨਹੀਂ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer loaded from component -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal" style="display:none;">
+        <div class="modal-content" style="width: 90%; max-width: 550px;">
+            <span class="close" onclick="closeSettingsModal()">&times;</span>
+            <h2>⚙️ ਸੈਟਿੰਗਜ਼</h2>
+            <hr>
+            <form id="settingsForm">
+                <!-- Dairy Info -->
+                <h3>🥛 ਡੇਅਰੀ ਜਾਣਕਾਰੀ</h3>
+                <div style="margin-bottom: 10px;">
+                    <label for="dairyName">ਡੇਅਰੀ ਦਾ ਨਾਮ:</label>
+                    <input type="text" id="dairyName" class="form-control" required>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label for="dairyOwner">ਮਾਲਕ ਦਾ ਨਾਮ:</label>
+                    <input type="text" id="dairyOwner" class="form-control" required>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label for="dairyAddress">ਪਤਾ:</label>
+                    <input type="text" id="dairyAddress" class="form-control" required>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label for="dairyPhone">ਫ਼ੋਨ ਨੰਬਰ:</label>
+                    <input type="tel" id="dairyPhone" class="form-control" required>
+                </div>
+
+                <!-- Default Farmer Info -->
+                <h3>👤 ਕਿਸਾਨ ਡਿਫੌਲਟ ਜਾਣਕਾਰੀ</h3>
+                <div style="margin-bottom: 10px;">
+                    <label for="defaultFarmerName">ਕਿਸਾਨ ਦਾ ਨਾਮ:</label>
+                    <input type="text" id="defaultFarmerName" class="form-control" placeholder="ਜਿਵੇਂ: ਅਰਸ਼ਦੀਪ ਸਿੰਘ">
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label for="defaultFarmerPhone">ਕਿਸਾਨ ਦਾ ਫ਼ੋਨ ਨੰਬਰ:</label>
+                    <input type="tel" id="defaultFarmerPhone" class="form-control" placeholder="ਜਿਵੇਂ: 98765-43210">
+                </div>
+
+                <!-- Rate Defaults for Buffalo and Cow -->
+                <h3>💰 ਰੇਟ ਡਿਫੌਲਟ (ਮੱਝ / ਗਾਂ)</h3>
+                <div class="form-row" style="gap: 1rem;">
+                    <div style="flex:1;">
+                        <label for="buffaloFixedRate">ਮੱਝ ਫਿਕਸ ਰੇਟ (₹/L):</label>
+                        <input type="number" id="buffaloFixedRate" class="form-control" step="0.01" min="0" required>
+                    </div>
+                    <div style="flex:1;">
+                        <label for="cowFixedRate">ਗਾਂ ਫਿਕਸ ਰੇਟ (₹/L):</label>
+                        <input type="number" id="cowFixedRate" class="form-control" step="0.01" min="0" required>
+                    </div>
+                </div>
+                <div class="form-row" style="gap: 1rem; margin-top: 10px;">
+                    <div style="flex:1;">
+                        <label for="buffaloFatRate">ਮੱਝ ਫੈਟ ਰੇਟ (₹/ਫੈਟ):</label>
+                        <input type="number" id="buffaloFatRate" class="form-control" step="0.01" min="0" required>
+                    </div>
+                    <div style="flex:1;">
+                        <label for="cowFatRate">ਗਾਂ ਫੈਟ ਰੇਟ (₹/ਫੈਟ):</label>
+                        <input type="number" id="cowFatRate" class="form-control" step="0.01" min="0" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 15px;">💾 ਸੇਵ ਕਰੋ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contact Modal (Email) -->
+    <div id="contactModal" class="modal" style="display:none;">
+        <div class="modal-content" style="width: 90%; max-width: 400px;">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>📬 ਸੰਪਰਕ ਕਰੋ</h2>
+            <hr>
+            <p style="font-size: 16px; text-align: center;">
+                ਤੁਸੀਂ ਸਾਨੂੰ ਹੇਠਾਂ ਦਿੱਤੇ ਈਮੇਲ ਪਤੇ ਰਾਹੀਂ ਸੰਪਰਕ ਕਰ ਸਕਦੇ ਹੋ:
+            </p>
+            <p style="font-size: 18px; font-weight: bold; text-align: center; word-break: break-all;">
+                <a href="mailto:kjaspal483@gmail.com" style="color: #2a9d8f;">kjaspal483@gmail.com</a>
+            </p>
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <button onclick="copyEmail()" class="btn btn-primary">📋 ਈਮੇਲ ਕਾਪੀ ਕਰੋ</button>
+            </div>
+            <p style="font-size: 12px; text-align: center; margin-top: 20px; color: #666;">
+                ਤੁਸੀਂ ਉਪਰ ਦਿੱਤੇ ਈਮੇਲ ਪਤੇ `ਤੇ ਕਲਿੱਕ ਕਰਕੇ ਆਪਣਾ ਈਮੇਲ ਕਲਾਇੰਟ ਖੋਲ੍ਹ ਸਕਦੇ ਹੋ।
+            </p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/script.js"></script>
+    <script src="../assets/dashboard.js"></script>
+    <script src="kachaSettings.js"></script>
+    <script src="kacha_logic.js"></script>
+    <script src="kachaPdf.js"></script>
+    <script>
+        // Contact modal functions
+        function copyEmail() {
+            const email = 'kjaspal483@gmail.com';
+            navigator.clipboard.writeText(email).then(() => {
+                alert('ਈਮੇਲ ਕਾਪੀ ਹੋ ਗਈ!');
+            }).catch(() => {
+                alert('ਕਾਪੀ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ, ਕਿਰਪਾ ਕਰਕੇ ਹੱਥੀਂ ਕਾਪੀ ਕਰੋ।');
+            });
+        }
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+        window.onclick = function (event) {
+            const modal = document.getElementById('contactModal');
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+    </script>
+</body>
+
+</html>
