@@ -12,6 +12,7 @@
 <body class="loading">
     <div id="marquee-placeholder"></div>
     <div id="header-placeholder"></div>
+    
     <main id="app-content">
         <!-- Cards Grid - Homepage Content -->
         <div class="cards-grid">
@@ -69,8 +70,10 @@
             </p>
         </div>
     </div>
+    
     <div id="footer-placeholder"></div>
 
+    <!-- scripts -->
     <script src="assets/script.js"></script>
     <script>
         // 1. Base path detection (works on GitHub Pages and localhost)
@@ -83,15 +86,15 @@
             return "/";
         }
 
-        // 2. Navigation functions
-        window.navigateLegal = function (pageName) {
+        // 2. Navigation functions (Global Scope)
+        window.navigateLegal = function(pageName) {
             window.location.href = getAppBasePath() + 'legal/' + pageName;
         };
-        window.navigateRoot = function (pageName) {
+        window.navigateRoot = function(pageName) {
             window.location.href = getAppBasePath() + pageName;
         };
 
-        // 3. Components Loader function (ਬਿਲਕੁਲ ਸਾਫ਼ ਅਤੇ ਫਿਕਸਡ)
+        // 3. Component loader (Marquee, Header, and Footer with Beautiful Green Fallbacks)
         async function loadComponents() {
             const basePath = getAppBasePath();
             const components = [
@@ -100,51 +103,71 @@
                 { id: 'footer-placeholder', url: `${basePath}components/footer.html` }
             ];
 
-            for (let comp of components) {
+            for (const comp of components) {
                 try {
                     const response = await fetch(comp.url);
-                    if (!response.ok) throw new Error('Failed to load ' + comp.url);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
                     document.getElementById(comp.id).innerHTML = await response.text();
                 } catch (error) {
-                    console.warn(`Fallback active for ${comp.id}:`, error);
+                    console.warn(`Fallback for ${comp.id}:`, error);
+                    
                     if (comp.id === 'marquee-placeholder') {
                         document.getElementById(comp.id).innerHTML = `
                             <div class="ticker-wrap" style="text-align:center; padding:0.5rem 0; font-weight:bold;">
                                 🐄 DairyCare Pro: ਆਪਣੇ ਦੁੱਧ ਦਾ ਹਿਸਾਬ ਰੱਖੋ ਸੌਖੇ ਤਰੀਕੇ ਨਾਲ
                             </div>
                         `;
+                    } else if (comp.id === 'header-placeholder') {
+                        document.getElementById(comp.id).innerHTML = `
+                            <header style="background: linear-gradient(135deg, #1e4d2b, #2a9d8f); color: white; padding: 1.2rem; text-align: center; font-size: 24px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+                                🐄 DairyCare Pro
+                            </header>
+                        `;
+                    } else if (comp.id === 'footer-placeholder') {
+                        document.getElementById(comp.id).innerHTML = `
+                            <footer style="background: #1e293b; color: #cbd5e1; text-align: center; padding: 1.5rem; font-size: 14px; margin-top: 2rem; border-top: 3px solid #2a9d8f;">
+                                Developed by Arshdeep Singh © 2026
+                            </footer>
+                        `;
                     }
                 }
             }
         }
 
-        // 4. Remove loading spinner after components are loaded
-        window.onload = async function () {
-            await loadComponents();
-            document.body.classList.remove('loading');
-        };
-
-        // 5. Email copy function
-        function copyEmail() {
-            const email = 'kjaspal483@gmail.com';
-            navigator.clipboard.writeText(email).then(() => {
-                alert('ਈਮੇਲ ਕਾਪੀ ਹੋ ਗਈ!');
-            }).catch(() => {
-                alert('ਕਾਪੀ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ, ਕਿਰਪਾ ਕਰਕੇ ਹੱਥੀਂ ਕਾਪੀ ਕਰੋ।');
-            });
-        }
-
-        // 6. Close modal functions
-        function closeModal() {
-            document.getElementById('contactModal').style.display = 'none';
-        }
-
-        window.onclick = function (event) {
-            const modal = document.getElementById('contactModal');
-            if (event.target === modal) {
-                modal.style.display = "none";
+        // 4. Start after page load (With Safe Safeguard)
+        window.onload = async function() {
+            try {
+                await loadComponents();
+            } catch (globalError) {
+                console.error("Error loading homepage components:", globalError);
+            } finally {
+                // ਇਹ ਲਾਈਨ ਹਰ ਹਾਲ ਵਿੱਚ ਚੱਲੇਗੀ, ਜਿਸ ਨਾਲ ਪੇਜ ਕਦੇ ਸਟੱਕ (Stuck) ਨਹੀਂ ਹੋਵੇਗਾ
+                document.body.classList.remove('loading');
             }
         };
+
+        // 5. Helper functions for modal (Global Scope)
+        window.copyEmail = function() {
+            const email = 'kjaspal483@gmail.com';
+            navigator.clipboard.writeText(email)
+                .then(() => alert('ਈਮੇਲ ਕਾਪੀ ਹੋ ਗਈ!'))
+                .catch(() => alert('ਕਾਪੀ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ, ਕਿਰਪਾ ਕਰਕੇ ਹੱਥੀਂ ਕਾਪੀ ਕਰੋ।'));
+        };
+
+        window.closeModal = function() {
+            const modal = document.getElementById('contactModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // ਮੋਡਲ ਤੋਂ ਬਾਹਰ ਕਲਿੱਕ ਕਰਨ 'ਤੇ ਬੰਦ ਕਰਨ ਲਈ
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('contactModal');
+            if (modal && event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
     </script>
 </body>
 
