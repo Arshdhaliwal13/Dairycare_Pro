@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Dairy Care Pro</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="components/marquee.css">
+</head>
+
+<body class="loading">
+    <div id="marquee-placeholder"></div>
+    <div id="header-placeholder"></div>
+    <main id="app-content">
+        <!-- Cards Grid - Homepage Content -->
+        <div class="cards-grid">
+            <!-- ਪੱਕਾ ਹਿਸਾਬ -->
+            <a href="pakka_hisab/pakka.html" class="card">
+                <div class="card-icon">📋</div>
+                <h3 class="card-title punjabi">ਪੱਕਾ ਹਿਸਾਬ</h3>
+                <p class="card-desc punjabi">ਰੋਜ਼ਾਨਾ ਦਾ ਪੱਕਾ ਰਿਕਾਰਡ</p>
+                <span class="card-badge">Daily Record</span>
+            </a>
+
+            <!-- ਕੱਚਾ ਹਿਸਾਬ -->
+            <a href="kacha_hisab/kacha.html" class="card">
+                <div class="card-icon">⚡</div>
+                <h3 class="card-title punjabi">ਕੱਚਾ ਹਿਸਾਬ</h3>
+                <p class="card-desc punjabi">ਤੇਜ਼ੀ ਨਾਲ ਹਿਸਾਬ</p>
+                <span class="card-badge">Quick Calc</span>
+            </a>
+
+            <!-- ਰਿਪੋਰਟਾਂ -->
+            <a href="reports/reports.html" class="card">
+                <div class="card-icon">📊</div>
+                <h3 class="card-title punjabi">ਰਿਪੋਰਟਾਂ</h3>
+                <p class="card-desc punjabi">PDF, ਗ੍ਰਾਫ਼,ਡਾਊਨਲੋਡ</p>
+                <span class="card-badge">Reports</span>
+            </a>
+
+            <!-- ਬਕਾਇਆ ਹਿਸਾਬ -->
+            <a href="dues/dues.html" class="card">
+                <div class="card-icon">💰</div>
+                <h3 class="card-title punjabi">ਖਰਚਾ ਹਿਸਾਬ</h3>
+                <p class="card-desc punjabi">ਰੋਜ਼ਾਨਾ ਖਰਚਿਆਂ ਦਾ ਰਿਕਾਰਡ</p>
+                <span class="card-badge">Dues</span>
+            </a>
+        </div>
+    </main>
+
+    <!-- Contact Modal (Email) -->
+    <div id="contactModal" class="modal" style="display:none;">
+        <div class="modal-content" style="width: 90%; max-width: 400px;">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>📬 ਸੰਪਰਕ ਕਰੋ</h2>
+            <hr>
+            <p style="font-size: 16px; text-align: center;">
+                ਤੁਸੀਂ ਸਾਨੂੰ ਹੇਠਾਂ ਦਿੱਤੇ ਈਮੇਲ ਪਤੇ ਰਾਹੀਂ ਸੰਪਰਕ ਕਰ ਸਕਦੇ ਹੋ:
+            </p>
+            <p style="font-size: 18px; font-weight: bold; text-align: center; word-break: break-all;">
+                <a href="mailto:kjaspal483@gmail.com" style="color: #2a9d8f;">kjaspal483@gmail.com</a>
+            </p>
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <button onclick="copyEmail()" class="btn btn-primary">📋 ਈਮੇਲ ਕਾਪੀ ਕਰੋ</button>
+            </div>
+            <p style="font-size: 12px; text-align: center; margin-top: 20px; color: #666;">
+                ਤੁਸੀਂ ਉਪਰ ਦਿੱਤੇ ਈਮੇਲ ਪਤੇ `ਤੇ ਕਲਿੱਕ ਕਰਕੇ ਆਪਣਾ ਈਮੇਲ ਕਲਾਇੰਟ ਖੋਲ੍ਹ ਸਕਦੇ ਹੋ।
+            </p>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- dashboard.js removed to avoid conflict with inline script -->
+    <script src="assets/script.js"></script>
+    <script>
+        // 1. Base path detection (works on GitHub Pages and localhost)
+        function getAppBasePath() {
+            const isGitHub = window.location.hostname.includes("github.io");
+            if (isGitHub) {
+                const repoName = window.location.pathname.split('/')[1];
+                return `/${repoName}/`;
+            }
+            return "/";
+        }
+
+        // 2. Navigation functions – CRITICAL: legal folder added
+        window.navigateLegal = function (pageName) {
+            window.location.href = getAppBasePath() + 'legal/' + pageName;
+        };
+        window.navigateRoot = function (pageName) {
+            window.location.href = getAppBasePath() + pageName;
+        };
+
+        // 3. Load header, footer and marquee components dynamically
+        async function loadComponents() {
+            const basePath = getAppBasePath();
+            const components = [
+                { id: 'marquee-placeholder', url: `${basePath}components/marquee.html` },
+                { id: 'header-placeholder', url: `${basePath}components/header.html` },
+                { id: 'footer-placeholder', url: `${basePath}components/footer.html` }
+            ];
+            for (let comp of components) {
+                try {
+                    const response = await fetch(comp.url);
+                    if (response.ok) {
+                        document.getElementById(comp.id).innerHTML = await response.text();
+                    } else {
+                        throw new Error('Failed to load ' + comp.url);
+                    }
+                } catch (error) {
+                    console.warn(error);
+                    // Fallback content if component missing
+                    // 3. Components Loader function ( FIXED SYNTAX )
+                    async function loadComponents() {
+                        const isGitHubPages = window.location.hostname.includes('github.io');
+
+                        const components = [
+                            { id: 'marquee-placeholder', path: isGitHubPages ? '/DairyCare_Pro/components/marquee.html' : '/components/marquee.html' }
+                        ];
+
+                        for (const comp of components) {
+                            try {
+                                const response = await fetch(comp.path);
+                                if (!response.ok) throw new Error(`Failed to load ${comp.path}`);
+                                const html = await response.text();
+                                document.getElementById(comp.id).innerHTML = html;
+                            } catch (error) {
+                                console.warn(`Fallback active for ${comp.id}:`, error);
+                                if (comp.id === 'marquee-placeholder') {
+                                    document.getElementById(comp.id).innerHTML = `
+                            <div class="ticker-wrap" style="text-align:center; padding:0.5rem 0; font-weight:bold;">
+                                🐄 DairyCare Pro: ਆਪਣੇ ਦੁੱਧ ਦਾ ਹਿਸਾਬ ਰੱਖੋ ਸੌਖੇ ਤਰੀਕੇ ਨਾਲ
+                            </div>
+                        `;
+                                }
+                            }
+                        }
+                    }
+                } else if (comp.id === 'footer-placeholder') {
+                    document.getElementById(comp.id).innerHTML = `
+                            <footer style="background:#1e293b; color:#cbd5e1; text-align:center; padding:1rem;">
+                                Developed by Arshdeep Singh © 2026
+                            </footer>
+                        `;
+                } else if (comp.id === 'marquee-placeholder') {
+                    document.getElementById(comp.id).innerHTML = `
+                            <div class="ticker-wrap" style="text-align:center; padding:0.5rem 0; font-weight:bold;">
+                                🐄 DairyCare Pro: ਆਪਣੇ ਦੁੱਧ ਦਾ ਹਿਸਾਬ ਰੱਖੋ ਸੌਖੇ ਤਰੀਕੇ ਨਾਲ
+                            </div>
+                        `;
+                }
+            }
+        }
+
+
+        // 4. Remove loading spinner after components are loaded
+        window.onload = async function () {
+            await loadComponents();
+            document.body.classList.remove('loading');
+        };
+
+        // 5. Email copy function
+        function copyEmail() {
+            const email = 'kjaspal483@gmail.com';
+            navigator.clipboard.writeText(email).then(() => {
+                alert('ਈਮੇਲ ਕਾਪੀ ਹੋ ਗਈ!');
+            }).catch(() => {
+                alert('ਕਾਪੀ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ, ਕਿਰਪਾ ਕਰਕੇ ਹੱਥੀਂ ਕਾਪੀ ਕਰੋ।');
+            });
+        }
+
+        // 6. Close modal functions
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+        window.onclick = function (event) {
+            const modal = document.getElementById('contactModal');
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+    </script>
+</body>
+
+</html>
