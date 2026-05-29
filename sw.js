@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dairycare-v4.5';
+const CACHE_NAME = 'dairycare-v4.7';
 const urlsToCache = [
   './',
   './index.html',
