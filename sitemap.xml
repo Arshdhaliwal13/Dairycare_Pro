@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- 1. ਮੇਨ ਹੋਮ ਪੇਜ (Homepage) -->
+    <url>
+        <loc>https://arshdhaliwal13.github.io/DairyCare_Pro/</loc>
+        <lastmod>2026-06-09</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>https://arshdhaliwal13.github.io/DairyCare_Pro/index.html</loc>
+        <lastmod>2026-06-09</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- 2. ਪੱਕਾ ਹਿਸਾਬ ਮੋਡੀਊਲ -->
+    <url>
+        <loc>https://arshdhaliwal13.github.io/DairyCare_Pro/pakka_hisab/pakka.html</loc>
+        <lastmod>2026-06-09</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- 3. ਕੱਚਾ ਹਿਸਾਬ ਮੋਡੀਊਲ -->
+    <url>
+        <loc>https://arshdhaliwal13.github.io/DairyCare_Pro/kacha_hisab/kacha.html</loc>
+        <lastmod>2026-06-09</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- 4. ਰਿਪੋਰਟਾਂ (Reports) -->
+    <url>
+        <loc>https://arshdhaliwal13.github.io/DairyCare_Pro/reports/reports.html</loc>
+        <lastmod>2026-06-09</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- 5. ਖਰਚਾ ਹਿਸਾਬ (Dues) -->
+    <url>
+        <loc>https://arshdhaliwal13.github.io/DairyCare_Pro/dues/dues.html</loc>
+        <lastmod>2026-06-09</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- 6. ਯੂਜ਼ਰ ਗਾਈਡ (User Guide) -->
+    <url>
+        <loc>https://arshdhaliwal13.github.io/DairyCare_Pro/guide.html</loc>
+        <lastmod>2026-06-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- 7. ਡੋਨੇਸ਼ਨ ਪੇਜ (Donate) -->
+    <url>
+        <loc>https://arshdhaliwal13.github.io/DairyCare_Pro/donate.html</loc>
+        <lastmod>2026-06-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+
+    <!-- 8. ਲੀਗਲ ਪੰਨੇ (ਜੇਕਰ ਤੁਸੀਂ robots.txt ਵਿੱਚ Allow ਕੀਤੇ ਹਨ) -->
+    <url>
+        <loc>https://arshdhaliwal13.github.io/DairyCare_Pro/legal/privacy.html</loc>
+        <lastmod>2026-06-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://arshdhaliwal13.github.io/DairyCare_Pro/legal/about.html</loc>
+        <lastmod>2026-06-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://arshdhaliwal13.github.io/DairyCare_Pro/legal/terms.html</loc>
+        <lastmod>2026-06-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.4</priority>
+    </url>
+</urlset>
