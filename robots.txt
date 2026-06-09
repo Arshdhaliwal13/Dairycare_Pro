@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /pakka_hisab/
+Allow: /kacha_hisab/
+Allow: /reports/
+Allow: /dues/
+Allow: /guide.html
+Disallow: /legal/
+Sitemap: https://arshdhaliwal13.github.io/DairyCare_Pro/sitemap.xml
