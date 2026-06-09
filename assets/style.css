@@ -1,5 +1,4 @@
 /* assets/style.css - Mobile Friendly for Android & iOS */
-
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +14,6 @@ body {
     flex-direction: column;
     min-height: 100vh;
     -webkit-text-size-adjust: 100%;
-    /* iOS text size fix */
     text-size-adjust: 100%;
 }
 
@@ -39,6 +37,18 @@ body {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    gap: 0.8rem;  /* added gap for better wrapping */
+}
+
+/* On very small screens, center items */
+@media (max-width: 480px) {
+    .header-flex {
+        justify-content: center;
+        text-align: center;
+    }
+    .version-badge {
+        margin-top: 0.3rem;
+    }
 }
 
 .logo a {
@@ -75,18 +85,18 @@ main {
     font-size: 1.1rem;
 }
 
-/* Loading Shimmer Effect */
+/* Loading Shimmer Effect – Fixed */
 .loading .card {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background: linear-gradient(90deg, #f8f9fa 0%, #e9ecef 50%, #f8f9fa 100%);
     background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
+    animation: shimmer 1.2s infinite;
+    border: none;
 }
 
 @keyframes shimmer {
     0% {
         background-position: 200% 0;
     }
-
     100% {
         background-position: -200% 0;
     }
@@ -113,7 +123,6 @@ main {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    /* Ensure touch target size */
     min-height: 48px;
 }
 
@@ -171,7 +180,7 @@ main {
     text-decoration: underline;
 }
 
-/* Modal Styles */
+/* Modal Styles – Improved for mobile */
 .modal {
     display: none;
     position: fixed;
@@ -186,12 +195,20 @@ main {
 
 .modal-content {
     background-color: white;
-    margin: 15% auto;
+    margin: 10% auto;
     padding: 20px;
     border-radius: 15px;
     width: 80%;
     max-width: 500px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile modal adjustments */
+@media (max-width: 600px) {
+    .modal-content {
+        margin: 5% auto;
+        width: 90%;
+    }
 }
 
 .close {
@@ -213,22 +230,17 @@ main {
 @media (max-width: 600px) {
     .cards-grid {
         grid-template-columns: 1fr;
-        /* ਇੱਕ ਕਾਲਮ ਵਿੱਚ ਕਾਰਡ */
         gap: 1rem;
     }
-
     .card {
         padding: 22px 18px;
     }
-
     .card-icon {
         font-size: 3.5rem;
     }
-
     .card-title {
         font-size: 1.5rem;
     }
-
     .card-desc {
         font-size: 1rem;
     }
