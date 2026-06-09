@@ -4,24 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ਸਹਿਯੋਗ / Donate - DairyCare Pro</title>
-    <script>
-        // Dynamic base path – works on localhost and GitHub Pages
-        (function() {
-            const isGitHub = window.location.hostname.includes('github.io');
-            const basePath = isGitHub ? '/DairyCare_Pro/' : '/';
-            const base = document.createElement('base');
-            base.href = basePath;
-            document.head.appendChild(base);
-        })();
-    </script>
     <link rel="stylesheet" href="assets/style.css">
     <style>
+        /* Minimal styles for donate page – matches card look of about.html */
         .donate-container {
             max-width: 600px;
             margin: 2rem auto;
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
             text-align: center;
-            padding: 1.5rem 1rem;
-            width: 90%;
         }
         .donate-qr {
             width: 220px;
@@ -50,17 +44,19 @@
 </head>
 <body>
     <div id="header-placeholder"></div>
-    <main class="container donate-container">
-        <h1>❤️ ਸਹਿਯੋਗ (Donate / Support)</h1>
-        <div class="humble-text">
-            <p>ਜੇਕਰ ਇਹ ਐਪ ਤੁਹਾਡੇ ਰੋਜ਼ਾਨਾ ਡੇਅਰੀ ਕੰਮ ਵਿੱਚ ਥੋੜ੍ਹੀ ਵੀ ਮਦਦ ਕਰਦੀ ਹੈ, ਤਾਂ ਤੁਸੀਂ ਆਪਣੀ ਮਰਜ਼ੀ ਨਾਲ ਥੋੜ੍ਹਾ ਜਿਹਾ ਸਹਿਯੋਗ ਕਰ ਸਕਦੇ ਹੋ।</p>
-            <p>ਇਹ ਸਿਰਫ਼ ਤੁਹਾਡੀ ਖੁਸ਼ੀ ਅਤੇ ਸ਼ੁਕਰੀਆ ਲਈ ਹੈ — <strong>ਕੋਈ ਪਾਬੰਦੀ ਨਹੀਂ, ਕੋਈ ਜ਼ਰੂਰਤ ਨਹੀਂ।</strong></p>
-            <p>ਤੁਹਾਡੇ ਦੁਆਰਾ ਭੇਜੀ ਗਈ ਹਰ ਰਕਮ ਸਾਡੇ ਲਈ ਹੌਸਲਾ ਹੈ।</p>
+    <main class="container">
+        <div class="donate-container">
+            <h1>❤️ ਸਹਿਯੋਗ (Donate / Support)</h1>
+            <div class="humble-text">
+                <p>ਜੇਕਰ ਇਹ ਐਪ ਤੁਹਾਡੇ ਰੋਜ਼ਾਨਾ ਡੇਅਰੀ ਕੰਮ ਵਿੱਚ ਥੋੜ੍ਹੀ ਵੀ ਮਦਦ ਕਰਦੀ ਹੈ, ਤਾਂ ਤੁਸੀਂ ਆਪਣੀ ਮਰਜ਼ੀ ਨਾਲ ਥੋੜ੍ਹਾ ਜਿਹਾ ਸਹਿਯੋਗ ਕਰ ਸਕਦੇ ਹੋ।</p>
+                <p>ਇਹ ਸਿਰਫ਼ ਤੁਹਾਡੀ ਖੁਸ਼ੀ ਅਤੇ ਸ਼ੁਕਰੀਆ ਲਈ ਹੈ — <strong>ਕੋਈ ਪਾਬੰਦੀ ਨਹੀਂ, ਕੋਈ ਜ਼ਰੂਰਤ ਨਹੀਂ।</strong></p>
+                <p>ਤੁਹਾਡੇ ਦੁਆਰਾ ਭੇਜੀ ਗਈ ਹਰ ਰਕਮ ਸਾਡੇ ਲਈ ਹੌਸਲਾ ਹੈ।</p>
+            </div>
+            <div class="donate-qr">
+                <img src="assets/images/upi-qr.png" alt="UPI QR Code">
+            </div>
+            <p style="margin-top: 30px;">ਧੰਨਵਾਦ! 🙏</p>
         </div>
-        <div class="donate-qr">
-            <img src="assets/images/upi-qr.png" alt="UPI QR Code">
-        </div>
-        <p style="margin-top: 30px;">ਧੰਨਵਾਦ! 🙏</p>
     </main>
     <div id="footer-placeholder"></div>
     <script src="assets/script.js"></script>
