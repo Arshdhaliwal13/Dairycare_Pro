@@ -3,8 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DairyCare Pro – ਪੂਰੀ ਜਾਣਕਾਰੀ</title>
+    <!-- Dynamic base path – works on localhost and GitHub Pages -->
+    <script>
+        (function () {
+            const isGitHub = window.location.hostname.includes('github.io');
+            const basePath = isGitHub ? '/DairyCare_Pro/' : '/';
+            const base = document.createElement('base');
+            base.href = basePath;
+            document.head.appendChild(base);
+        })();
+    </script>
     <link rel="stylesheet" href="assets/style.css">
     <style>
         .blog-post {
@@ -71,11 +81,9 @@
     <main class="container">
         <div class="blog-post">
             <h1>🐄 DairyCare Pro – ਪੂਰੀ ਵੈੱਬਸਾਈਟ ਦੀ ਸੌਖੀ ਸਮਝ (User Guide)</h1>
-            <p><strong>ਇਹ ਬਲੌਗ ਤੁਹਾਨੂੰ DairyCare Pro ਦੀ ਹਰੇਕ ਚੀਜ਼ ਬਾਰੇ ਦੱਸੇਗਾ – ਬਿਲਕੁਲ ਸੌਖੀ ਭਾਸ਼ਾ ਵਿੱਚ
-                </strong></p>
+            <p><strong>ਇਹ ਬਲੌਗ ਤੁਹਾਨੂੰ DairyCare Pro ਦੀ ਹਰੇਕ ਚੀਜ਼ ਬਾਰੇ ਦੱਸੇਗਾ – ਬਿਲਕੁਲ ਸੌਖੀ ਭਾਸ਼ਾ ਵਿੱਚ</strong></p>
             <hr>
 
-            <!-- SECTION 1 – ਜਾਣ-ਪਛਾਣ -->
             <h2>1. DairyCare Pro ਕੀ ਹੈ?</h2>
             <p>ਇਹ ਇੱਕ ਵੈੱਬਸਾਈਟ (ਐਪ) ਹੈ ਜੋ ਡੇਅਰੀ ਕਿਸਾਨਾਂ ਨੂੰ ਰੋਜ਼ਾਨਾ ਦੁੱਧ ਦਾ ਹਿਸਾਬ ਰੱਖਣ ਵਿੱਚ ਮਦਦ ਕਰਦੀ ਹੈ। ਤੁਸੀਂ ਇਸਨੂੰ
                 ਆਪਣੇ ਮੋਬਾਈਲ ਜਾਂ ਕੰਪਿਊਟਰ ‘ਤੇ ਵਰਤ ਸਕਦੇ ਹੋ। <strong>ਇੰਟਰਨੈੱਟ ਤੋਂ ਬਿਨਾਂ ਵੀ ਚੱਲਦੀ ਹੈ</strong> (ਇੱਕ ਵਾਰ ਲੋਡ
@@ -93,7 +101,6 @@
             </ol>
 
             <hr>
-            <!-- SECTION 2 – PAKKA HISAB -->
             <h2>3. ਪੱਕਾ ਹਿਸਾਬ – ਰੋਜ਼ਾਨਾ ਦੁੱਧ ਦਾ ਪੱਕਾ ਰਿਕਾਰਡ</h2>
             <p>ਇਸ ਭਾਗ ਵਿੱਚ ਤੁਸੀਂ ਹਰ ਰੋਜ਼ ਦੁੱਧ ਦੀ ਮਾਤਰਾ, ਰੇਟ, ਕੁੱਲ ਕਮਾਈ ਦਾਖਲ ਕਰ ਸਕਦੇ ਹੋ।</p>
 
@@ -122,8 +129,7 @@
 
             <h3>3.7 ਐਂਟਰੀ ਸੇਵ ਕਰੋ</h3>
             <p>“💾 ਐਂਟਰੀ ਸੇਵ ਕਰੋ” ਬਟਨ ਦਬਾਓ।</p>
-            <div class="tip">💡 <strong>ਸੁਝਾਅ:</strong> ਦੁੱਧ ਭਰਨ ਤੋਂ ਬਾਅਦ “Enter” ਕੁੰਜੀ ਦਬਾਓ – ਐਂਟਰੀ ਸੇਵ ਹੋ ਜਾਵੇਗੀ |
-            </div>
+            <div class="tip">💡 <strong>ਸੁਝਾਅ:</strong> ਦੁੱਧ ਭਰਨ ਤੋਂ ਬਾਅਦ “Enter” ਕੁੰਜੀ ਦਬਾਓ – ਐਂਟਰੀ ਸੇਵ ਹੋ ਜਾਵੇਗੀ ।</div>
 
             <h3>3.8 ਅੱਜ ਦਾ ਸਾਰ (Summary)</h3>
             <p>“ਅੱਜ ਦਾ ਸਾਰ” ਕਾਰਡ ਵਿੱਚ ਅੱਜ ਦਾ ਕੁੱਲ ਦੁੱਧ ਅਤੇ ਕੁੱਲ ਕਮਾਈ ਦਿਖਾਈ ਦਿੰਦੀ ਹੈ।</p>
@@ -140,7 +146,6 @@
                 ਸਕਦੇ ਹੋ। “💾 ਸੇਵ ਕਰੋ” ਦਬਾਉਣ ਨਾਲ ਸਭ ਸੇਵ ਹੋ ਜਾਂਦਾ ਹੈ ।</p>
 
             <hr>
-            <!-- SECTION 3 – KACHA HISAB -->
             <h2>4. ਕੱਚਾ ਹਿਸਾਬ – ਤੇਜ਼ੀ ਨਾਲ ਐਂਟਰੀ (Kacha Hisab)</h2>
             <p>ਇਹ ਭਾਗ <strong>ਸਿਰਫ਼ ਉਸੇ ਟੈਬ ‘ਤੇ ਕੰਮ ਕਰਦਾ ਹੈ</strong> ਜਦੋਂ ਤੱਕ ਬ੍ਰਾਊਜ਼ਰ ਬੰਦ ਨਾ ਕਰੋ। ਪੰਨਾ ਰੀਲੋਡ ਕਰਨ ‘ਤੇ
                 ਡਾਟਾ ਮਿਟ ਜਾਂਦਾ ਹੈ – ਇਸ ਲਈ ਇਹ “ਕੱਚਾ” ਹੈ।</p>
@@ -163,7 +168,6 @@
             <h3>4.3 ਐਂਟਰੀ ਐਡਿਟ / ਡਿਲੀਟ</h3>
             <p>ਹਰ ਐਂਟਰੀ ਨਾਲ ✏️ (ਸੋਧ) ਅਤੇ 🗑️ (ਮਿਟਾਓ) ਦੇ ਬਟਨ ਹਨ।</p>
 
-
             <h3>4.4 ਕੁੱਲ ਦੁੱਧ ਅਤੇ ਆਮਦਨ</h3>
             <p>“ਹੁਣ ਤੱਕ ਦਾ ਕੁੱਲ” ਭਾਗ ਵਿੱਚ ਸਿਰਫ਼ ਮੌਜੂਦਾ ਸੈਸ਼ਨ ਦੀਆਂ ਐਂਟਰੀਆਂ ਦਾ ਕੁੱਲ ਜੋੜ ਅਤੇ ਕੁੱਲ ਕਮਾਈ ਲਾਈਵ ਦਿਖਾਈ ਦਿੰਦੀ ਹੈ।
             </p>
@@ -176,7 +180,6 @@
             <p>ਡੇਅਰੀ ਜਾਣਕਾਰੀ, ਡਿਫੌਲਟ ਕਿਸਾਨ, ਰੇਟ (ਮੱਝ/ਗਾਂ) – ਪੱਕਾ Hisab ਨਾਲੋਂ ਵੱਖਰੀ, ਪਰ structure ਇੱਕੋ ਜਿਹੀ।</p>
 
             <hr>
-            <!-- SECTION 4 – REPORTS -->
             <h2>5. ਰਿਪੋਰਟਾਂ (Reports) – ਪੂਰਾ ਵਿਸ਼ਲੇਸ਼ਣ</h2>
             <p>ਇਹ ਭਾਗ <strong>ਸਿਰਫ਼ ਪੱਕੇ ਹਿਸਾਬ ਦੀਆਂ ਐਂਟਰੀਆਂ</strong> ‘ਤੇ ਕੰਮ ਕਰਦਾ ਹੈ।</p>
 
@@ -225,7 +228,6 @@
                 table PDF ਵਿੱਚ include / exclude ਕਰ ਸਕਦੇ ਹੋ।</p>
 
             <hr>
-            <!-- SECTION 5 – DUES (EXPENSE) -->
             <h2>6. ਖਰਚਾ ਹਿਸਾਬ (Dues) – ਸਿਰਫ਼ ਖਰਚੇ ਜੋੜੋ</h2>
             <p>ਇਹ ਮੋਡੀਊਲ <strong>ਕੋਈ ਅਗਾਊਂ (advance) ਨਹੀਂ ਰੱਖਦਾ</strong>, ਸਿਰਫ਼ ਤੁਹਾਡੇ ਰੋਜ਼ਾਨਾ/ਮਹੀਨਾਵਾਰ ਖਰਚੇ।</p>
 
@@ -257,7 +259,6 @@
             <div class="warning">⚠️ ਧਿਆਨ: ਸਾਰਾ ਡਾਟਾ ਮਿਟਾ ਦਿੰਦਾ ਹੈ, ਬੈਕਅੱਪ ਨਹੀਂ।</div>
 
             <hr>
-            <!-- SECTION 6 – OFFLINE & SERVICE WORKER -->
             <h2>7. ਵੈੱਬਸਾਈਟ ਦਾ ਆਫਲਾਈਨ (Offline) ਚੱਲਣਾ</h2>
             <p>DairyCare Pro <strong>Service Worker</strong> ਤਕਨੀਕ ਵਰਤਦੀ ਹੈ। ਜਦੋਂ ਤੁਸੀਂ ਪਹਿਲੀ ਵਾਰ ਵੈੱਬਸਾਈਟ ਖੋਲ੍ਹਦੇ ਹੋ
                 (ਇੰਟਰਨੈੱਟ ਨਾਲ), ਤਾਂ ਸਾਰੀਆਂ ਫਾਈਲਾਂ (HTML, CSS, JS, fonts) ਤੁਹਾਡੇ ਫੋਨ ਦੇ cache ਵਿੱਚ ਸੁਰੱਖਿਅਤ ਹੋ ਜਾਂਦੀਆਂ
@@ -269,15 +270,13 @@
                 ਨਵਾਂ version ਲੈ ਸਕਦੇ ਹੋ।</p>
 
             <hr>
-            <!-- SECTION 7 – VERSION & UPDATE BUTTON -->
             <h2>8. Version Number ਅਤੇ Update Button</h2>
-            <p>Header ਵਿੱਚ <span class="code-inline">v3.8</span> ਦਿਖਾਈ ਦਿੰਦਾ ਹੈ। ਇਹ ਤੁਹਾਨੂੰ ਪਤਾ ਲਗਾਉਣ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹੈ
+            <p>Header ਵਿੱਚ <span class="code-inline">v5.0</span> ਦਿਖਾਈ ਦਿੰਦਾ ਹੈ। ਇਹ ਤੁਹਾਨੂੰ ਪਤਾ ਲਗਾਉਣ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹੈ
                 ਕਿ ਤੁਸੀਂ ਬਿਲਕੁਲ ਨਵਾਂ ਵਰਜਨ ਵਰਤ ਰਹੇ ਹੋ।</p>
             <p>Footer ਵਿੱਚ <strong>“🔄 ਨਵਾਂ ਅੱਪਡੇਟ ਚੈੱਕ ਕਰੋ”</strong> ਬਟਨ ਹੈ। ਇਸ ਨੂੰ ਕਲਿੱਕ ਕਰਨ ‘ਤੇ service worker ਨਵੀਂ
                 ਫਾਈਲਾਂ ਡਾਊਨਲੋਡ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰਦਾ ਹੈ। ਜੇ ਕੋਈ ਅੱਪਡੇਟ ਮਿਲਦਾ ਹੈ, ਤਾਂ ਪੰਨਾ ਆਪੇ ਰੀਲੋਡ ਹੋ ਜਾਂਦਾ ਹੈ।</p>
 
             <hr>
-            <!-- SECTION 8 – DATA STORAGE & PRIVACY -->
             <h2>9. ਤੁਹਾਡਾ ਡਾਟਾ ਕਿੱਥੇ ਸਟੋਰ ਹੁੰਦਾ ਹੈ?</h2>
             <ul>
                 <li><strong>Pakka Entries:</strong> localStorage (ਤੁਹਾਡੇ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ) – ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ browser data
@@ -290,7 +289,6 @@
             <p>ਸਾਡੇ ਕੋਈ server ‘ਤੇ ਕੁਝ ਨਹੀਂ ਜਾਂਦਾ। ਤੁਹਾਡਾ ਡਾਟਾ ਪੂਰੀ ਤਰ੍ਹਾਂ ਪ੍ਰਾਈਵੇਟ ਹੈ।</p>
 
             <hr>
-            <!-- SECTION 9 – COMMON TIPS & TRICKS -->
             <h2>10. ਛੋਟੇ ਸੁਝਾਅ (Tips & Tricks)</h2>
             <ul>
                 <li>Pakka Hisab ਵਿੱਚ <strong>Enter</strong> ਦਬਾਉਣ ਨਾਲ ਐਂਟਰੀ ਤੁਰੰਤ ਸੇਵ ਹੋ ਜਾਂਦੀ ਹੈ।</li>
@@ -305,7 +303,6 @@
             </ul>
 
             <hr>
-            <!-- SECTION 10 – TROUBLESHOOTING -->
             <h2>11. ਆਮ ਸਮੱਸਿਆਵਾਂ ਅਤੇ ਹੱਲ</h2>
             <div class="tip">
                 <strong>❓ ਸਵਾਲ:</strong> “Service worker not active” error ਆ ਰਿਹਾ ਹੈ?<br>
@@ -327,7 +324,6 @@
             <p><strong>iPhone (Safari):</strong> Share button (box with arrow) → "Add to Home Screen" → "Add" ਦਬਾਓ।</p>
 
             <hr>
-            <!-- SECTION 11 – CONCLUSION -->
             <h2>13. ਸਿੱਟਾ</h2>
             <p>DairyCare Pro ਇੱਕ <strong>ਸੰਪੂਰਨ, ਆਸਾਨ, offline-ਸਮਰੱਥ</strong> ਡੇਅਰੀ ਰਿਕਾਰਡ ਰੱਖਣ ਵਾਲੀ ਐਪ ਹੈ। ਇਹ ਪੂਰੀ
                 ਤਰ੍ਹਾਂ ਮੁਫਤ ਹੈ, ਕੋਈ ਇਸ਼ਤਿਹਾਰ ਨਹੀਂ, ਕੋਈ ਲੁਕਵੀਂ ਫੀਸ ਨਹੀਂ।</p>
@@ -338,8 +334,8 @@
         </div>
     </main>
     <div id="footer-placeholder"></div>
-    <script src="../assets/script.js"></script>
-    <script src="../assets/dashboard.js"></script>
+    <script src="assets/script.js"></script>
+    <script src="assets/dashboard.js"></script>
 </body>
 
 </html>
