@@ -1,6 +1,6 @@
 // assets/script.js – Offline + Daily Refresh + Optimized
 
-// 🎯 GitHub Pages ਅਤੇ Localhost ਦੋਵਾਂ ਲਈ ਸਹੀ ਪਾਥ ਚੁਣੋ
+// 🎯 GitHub Pages ਅਤੇ Localhost ਲਈ ਸਹੀ ਪਾਥ
 const isGH = window.location.hostname.includes("github.io");
 const swPath = isGH ? '/DairyCare_Pro/sw.js' : '/sw.js';
 
@@ -11,7 +11,7 @@ if ('serviceWorker' in navigator) {
     .catch(err => console.error('SW registration failed:', err));
 }
 
-// Daily version check (once per day) - FIXED INEFFICIENCY
+// 🛠️ Daily auto‑update check (once per day)
 function checkForUpdates() {
   const lastCheck = localStorage.getItem('sw_update_check');
   const today = new Date().toISOString().slice(0, 10);
@@ -19,18 +19,27 @@ function checkForUpdates() {
   if (lastCheck !== today) {
     if (navigator.serviceWorker.controller) {
       navigator.serviceWorker.ready.then(registration => {
-        registration.update()
-          .then(() => {
-            // ਜੇਕਰ ਕੋਈ ਨਵਾਂ ਸਰਵਿਸ ਵਰਕਰ ਵੇਟਿੰਗ ਵਿੱਚ ਹੈ
-            if (registration.waiting) {
-              localStorage.setItem('sw_update_check', today);
-              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-            } else {
-              // [FIXED] ਜੇ ਕੋਈ ਅਪਡੇਟ ਨਹੀਂ ਮਿਲਿਆ, ਤਾਂ ਵੀ ਅੱਜ ਦੀ ਡੇਟ ਸੇਵ ਕਰੋ ਤਾਂ ਜੋ ਵਾਰ-ਵਾਰ ਰਿਕਵੈਸਟ ਨਾ ਜਾਵੇ
-              localStorage.setItem('sw_update_check', today);
-            }
-          })
-          .catch(err => console.warn('Auto update check failed (Network issue etc.):', err)); // [FIXED] Added catch block
+        // ✅ FIRST: Check if a waiting worker already exists (from previous session)
+        if (registration.waiting) {
+          localStorage.setItem('sw_update_check', today);
+          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          return;
+        }
+
+        // ✅ SECOND: Listen for new update BEFORE calling .update()
+        registration.onupdatefound = () => {
+          const newWorker = registration.installing;
+          if (newWorker) {
+            newWorker.onstatechange = () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                localStorage.setItem('sw_update_check', today);
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+              }
+            };
+          }
+        };
+        // Now trigger the update check
+        registration.update().catch(err => console.warn('Auto update check failed:', err));
       });
     } else {
       localStorage.setItem('sw_update_check', today);
@@ -38,7 +47,7 @@ function checkForUpdates() {
   }
 }
 
-// Listen for skip waiting message (ਤਾਂ ਜੋ ਸਾਰੇ ਟੈਬਸ ਵਿੱਚ ਅੱਪਡੇਟ ਹੋ ਸਕੇ)
+// Listen for SKIP_WAITING message and reload all tabs
 let refreshing = false;
 navigator.serviceWorker.addEventListener('controllerchange', () => {
   if (!refreshing) {
@@ -47,21 +56,28 @@ navigator.serviceWorker.addEventListener('controllerchange', () => {
   }
 });
 
-// ਪੇਜ ਲੋਡ ਹੋਣ 'ਤੇ ਚੈੱਕ ਕਰੋ
+// Initial check & online event
 checkForUpdates();
 window.addEventListener('online', () => checkForUpdates());
 
-// Manual update check (User ਵੱਲੋਂ ਬਟਨ ਦਬਾਉਣ 'ਤੇ)
+// Manual update check (with polling for waiting worker)
 async function checkForManualUpdate() {
   try {
     const registration = await navigator.serviceWorker.ready;
     await registration.update();
 
-    if (registration.waiting) {
-      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-    } else {
-      alert('No update available. Your app is up to date.');
-    }
+    // Poll for waiting worker (max 2 seconds)
+    let attempts = 0;
+    const checkWaiting = setInterval(() => {
+      if (registration.waiting) {
+        clearInterval(checkWaiting);
+        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      } else if (attempts >= 20) {
+        clearInterval(checkWaiting);
+        alert('No update available or update taking too long. Try again later.');
+      }
+      attempts++;
+    }, 100);
   } catch (error) {
     console.error('Manual update check failed:', error);
     alert('Update check failed. Please refresh page and try again.');
@@ -75,19 +91,23 @@ document.addEventListener('click', async (event) => {
   }
 });
 
-// ਐਪ ਵਰਜ਼ਨ ਡਿਸਪਲੇਅ ਲੌਜਿਕ
-const APP_VERSION = 'v4.7';
+// Version display (sync with sw.js)
+const APP_VERSION = 'v5.0';
 
-document.addEventListener('DOMContentLoaded', function () {
-  setVersionNumber();
-});
+let versionRetryCount = 0;
+const MAX_RETRIES = 20;
 
 function setVersionNumber() {
   const versionSpan = document.getElementById('appVersion');
   if (versionSpan) {
-    versionSpan.innerText = APP_VERSION; 
+    versionSpan.innerText = APP_VERSION;
     console.log('Version set to:', versionSpan.innerText);
-  } else {
+  } else if (versionRetryCount < MAX_RETRIES) {
+    versionRetryCount++;
     setTimeout(setVersionNumber, 200);
+  } else {
+    console.warn('Version span not found after max retries.');
   }
 }
+
+document.addEventListener('DOMContentLoaded', setVersionNumber);
