@@ -7,7 +7,6 @@ async function loadComponent(elementId, filePath) {
         const response = await fetch(filePath);
         if (!response.ok) throw new Error('Failed to load ' + filePath);
         const html = await response.text();
-
         const element = document.getElementById(elementId);
         if (element) {
             element.innerHTML = html;
@@ -19,38 +18,41 @@ async function loadComponent(elementId, filePath) {
 
 // 2. ਬਾਕੀ ਪੰਨਿਆਂ ਲਈ ਹੈਡਰ-ਫੁੱਟਰ ਲੋਡ ਕਰਨਾ (index.html ਨੂੰ ਛੱਡ ਕੇ)
 document.addEventListener('DOMContentLoaded', async () => {
-    const path = window.location.pathname;
+    let path = window.location.pathname;
+    // Remove trailing slash for consistent comparison
+    let normalizedPath = path.replace(/\/$/, '');
+    // Convert to lowercase for case‑insensitive checks
+    const lowerPath = normalizedPath.toLowerCase();
 
-    // 🎯 ਜੇਕਰ ਮੌਜੂਦਾ ਪੇਜ ਹੋਮਪੇਜ (index.html) ਹੈ, ਤਾਂ ਇੱਥੋਂ ਹੀ ਵਾਪਸ ਮੁੜ ਜਾਓ
-    // ਇਸ ਨਾਲ index.html ਦੇ ਆਪਣੇ ਕੋਡ ਨਾਲ ਕੋਈ ਟੱਕਰ (Conflict) ਨਹੀਂ ਹੋਵੇਗੀ
-    if (path.endsWith('index.html') || path === '/' || path.endsWith('/DairyCare_Pro/')) {
+    // 🔥 Homepage detection (case‑insensitive, handles all cases)
+    const isHomepage = (
+        lowerPath.endsWith('index.html') ||
+        normalizedPath === '' ||
+        normalizedPath === '/' ||
+        lowerPath === '/dairycare_pro'
+    );
+
+    if (isHomepage) {
         console.log("Index page detected, skipping dashboard.js component loading.");
         return;
     }
 
-    // ਇਹ ਲੌਜਿਕ ਸਿਰਫ਼ ਅੰਦਰਲੇ ਪੰਨਿਆਂ (pakka, kacha, reports, dues) 'ਤੇ ਹੀ ਚੱਲੇਗਾ
-    const isGitHubPages = window.location.hostname.includes('github.io');
-    if (isGitHubPages) {
-        await loadComponent('header-placeholder', '/DairyCare_Pro/components/header.html');
-        await loadComponent('footer-placeholder', '/DairyCare_Pro/components/footer.html');
-    } else {
-        await loadComponent('header-placeholder', '/components/header.html');
-        await loadComponent('footer-placeholder', '/components/footer.html');
-    }
+    // 🔥 Dynamic base path for components (no hardcoding)
+    const base = window.getAppBasePath(); // returns '/DairyCare_Pro/' or '/'
+    await loadComponent('header-placeholder', `${base}components/header.html`);
+    await loadComponent('footer-placeholder', `${base}components/footer.html`);
 });
 
-// 3. 👑 ਸੁਰੱਖਿਅਤ ਗਲੋਬਲ ਨੈਵੀਗੇਸ਼ਨ ਫੰਕਸ਼ਨ ( window. ਆਬਜੈਕਟ ਨਾਲ ਸੈੱਟ ਕੀਤੇ ਹਨ )
+// 3. ਗਲੋਬਲ ਨੈਵੀਗੇਸ਼ਨ ਫੰਕਸ਼ਨ
 window.getAppBasePath = function () {
     const isGH = window.location.hostname.includes('github.io');
     return isGH ? '/DairyCare_Pro/' : '/';
 };
 
 window.navigateLegal = function (page) {
-    // ਲੀਗਲ ਫੋਲਡਰ ਦੇ ਪਾਥ ਨੂੰ ਬਿਲਕੁਲ ਸਹੀ ਤਰ੍ਹਾਂ ਜੋੜਦਾ ਹੈ
     window.location.href = window.location.origin + window.getAppBasePath() + 'legal/' + page;
 };
 
 window.navigateRoot = function (page) {
-    // ਰੂਟ ਫੋਲਡਰ ਦੇ ਪੰਨਿਆਂ 'ਤੇ ਲੈ ਕੇ ਜਾਂਦਾ ਹੈ
     window.location.href = window.location.origin + window.getAppBasePath() + page;
 };
