@@ -100,3 +100,21 @@ self.addEventListener('message', event => {
     self.skipWaiting();
   }
 });
+// 3. Install Event - ਹੁਣ ਇਹ ਮਿਸਿੰਗ ਫਾਈਲ ਦਾ ਨਾਮ ਸਾਫ਼-ਸਾਫ਼ ਦੱਸੇਗਾ ਅਤੇ SW ਫੇਲ੍ਹ ਨਹੀਂ ਹੋਵੇਗਾ
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      console.log('Validating and caching all assets cleanly...');
+      
+      // cache.addAll ਦੀ ਥਾਂ ਇੱਕ-ਇੱਕ ਕਰਕੇ ਫਾਈਲ ਚੈੱਕ ਕਰਨਾ ਤਾਂ ਜੋ SW ਇੰਸਟਾਲੇਸ਼ਨ ਫੇਲ੍ਹ ਨਾ ਹੋਵੇ
+      return Promise.all(
+        urlsToCache.map(url => {
+          return cache.add(url).catch(err => {
+            console.error(`❌ ਕੈਸ਼ ਹੋਣੋਂ ਰਹਿ ਗਈ ਫਾਈਲ (This file failed to cache): ${url}`, err);
+          });
+        })
+      );
+    })
+  );
+  self.skipWaiting();
+});
