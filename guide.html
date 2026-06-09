@@ -3,63 +3,56 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>DairyCare Pro – ਪੂਰੀ ਜਾਣਕਾਰੀ</title>
-    <!-- Dynamic base path – works on localhost and GitHub Pages -->
-    <script>
-        (function () {
-            const isGitHub = window.location.hostname.includes('github.io');
-            const basePath = isGitHub ? '/DairyCare_Pro/' : '/';
-            const base = document.createElement('base');
-            base.href = basePath;
-            document.head.appendChild(base);
-        })();
-    </script>
     <link rel="stylesheet" href="assets/style.css">
     <style>
-        .blog-post {
+        /* Only extra styles for guide content – keeps global design consistent */
+        .guide-content {
             max-width: 800px;
-            margin: 0 auto;
-            padding: 1rem;
-            font-size: 18px;
-            line-height: 1.8;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
         }
 
-        .blog-post h2 {
+        .guide-content h2 {
             color: #2d6a4f;
             border-left: 5px solid #2a9d8f;
-            margin-top: 2rem;
+            padding-left: 1rem;
+            margin-top: 1.8rem;
+            margin-bottom: 1rem;
         }
 
-        .blog-post h3 {
+        .guide-content h3 {
             color: #21867a;
             margin-top: 1.5rem;
         }
 
-        .blog-post p {
-            margin: 1rem 0;
+        .guide-content p,
+        .guide-content li {
+            line-height: 1.6;
+            color: #1e293b;
         }
 
-        .blog-post ul,
-        .blog-post ol {
+        .guide-content ul,
+        .guide-content ol {
             margin-left: 1.5rem;
-        }
-
-        .blog-post li {
-            margin: 0.5rem 0;
         }
 
         .tip {
             background: #e9f5ef;
-            padding: 0.8rem;
-            border-radius: 15px;
+            padding: 1rem;
+            border-radius: 18px;
             margin: 1rem 0;
         }
 
         .warning {
             background: #fff3cd;
-            padding: 0.8rem;
-            border-radius: 15px;
+            padding: 1rem;
+            border-radius: 18px;
             margin: 1rem 0;
         }
 
@@ -69,17 +62,13 @@
             border-radius: 8px;
             font-family: monospace;
         }
-
-        hr {
-            margin: 2rem 0;
-        }
     </style>
 </head>
 
 <body>
     <div id="header-placeholder"></div>
     <main class="container">
-        <div class="blog-post">
+        <div class="guide-content">
             <h1>🐄 DairyCare Pro – ਪੂਰੀ ਵੈੱਬਸਾਈਟ ਦੀ ਸੌਖੀ ਸਮਝ (User Guide)</h1>
             <p><strong>ਇਹ ਬਲੌਗ ਤੁਹਾਨੂੰ DairyCare Pro ਦੀ ਹਰੇਕ ਚੀਜ਼ ਬਾਰੇ ਦੱਸੇਗਾ – ਬਿਲਕੁਲ ਸੌਖੀ ਭਾਸ਼ਾ ਵਿੱਚ</strong></p>
             <hr>
@@ -129,7 +118,7 @@
 
             <h3>3.7 ਐਂਟਰੀ ਸੇਵ ਕਰੋ</h3>
             <p>“💾 ਐਂਟਰੀ ਸੇਵ ਕਰੋ” ਬਟਨ ਦਬਾਓ।</p>
-            <div class="tip">💡 <strong>ਸੁਝਾਅ:</strong> ਦੁੱਧ ਭਰਨ ਤੋਂ ਬਾਅਦ “Enter” ਕੁੰਜੀ ਦਬਾਓ – ਐਂਟਰੀ ਸੇਵ ਹੋ ਜਾਵੇਗੀ ।</div>
+            <div class="tip">💡 <strong>ਸੁਝਾਅ:</strong> ਦੁੱਧ ਭਰਨ ਤੋਂ ਬਾਅਦ “Enter” ਕੁੰਜੀ ਦਬਾਓ – ਐਂਟਰੀ ਸੇਵ ਹੋ ਜਾਵੇਗੀ</div>
 
             <h3>3.8 ਅੱਜ ਦਾ ਸਾਰ (Summary)</h3>
             <p>“ਅੱਜ ਦਾ ਸਾਰ” ਕਾਰਡ ਵਿੱਚ ਅੱਜ ਦਾ ਕੁੱਲ ਦੁੱਧ ਅਤੇ ਕੁੱਲ ਕਮਾਈ ਦਿਖਾਈ ਦਿੰਦੀ ਹੈ।</p>
