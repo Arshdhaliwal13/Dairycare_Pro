@@ -1,5 +1,5 @@
 const CACHE_NAME = 'dairycare-v5.6';
-const BASE_PATH = '/DairyCare_Pro/';
+const BASE_PATH = '/Dairycare_Pro/';
 
 const urlsToCache = [
   BASE_PATH,              // 👈 root – offline 'ch index.html without typing full name
