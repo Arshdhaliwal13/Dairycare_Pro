@@ -6,4 +6,4 @@ Allow: /reports/
 Allow: /dues/
 Allow: /guide.html
 Disallow: /legal/
-Sitemap: https://arshdhaliwal13.github.io/DairyCare_Pro/sitemap.xml
+Sitemap: https://arshdhaliwal13.github.io/Dairycare_Pro/sitemap.xml
