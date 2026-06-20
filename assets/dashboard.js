@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 🔥 Dynamic base path for components (no hardcoding)
-    const base = window.getAppBasePath(); // returns '/DairyCare_Pro/' or '/'
+    const base = window.getAppBasePath(); // returns '/Dairycare_Pro/' or '/'
     await loadComponent('header-placeholder', `${base}components/header.html`);
     await loadComponent('footer-placeholder', `${base}components/footer.html`);
 });
