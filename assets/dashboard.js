@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // 3. ਗਲੋਬਲ ਨੈਵੀਗੇਸ਼ਨ ਫੰਕਸ਼ਨ
 window.getAppBasePath = function () {
     const isGH = window.location.hostname.includes('github.io');
-    return isGH ? '/DairyCare_Pro/' : '/';
+    return isGH ? '/Dairycare_Pro/' : '/';
 };
 
 window.navigateLegal = function (page) {
