@@ -5,8 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>DairyCare Pro - ਡੇਅਰੀ ਦਾ ਡਿਜੀਟਲ ਹਿਸਾਬ-ਕਿਤਾਬ</title>
-<meta property="og:title" content="DairyCare Pro - ਡੇਅਰੀ ਦਾ ਡਿਜੀਟਲ ਹਿਸਾਬ-ਕਿਤਾਬ">
-<meta property="og:description" content="ਦੁੱਧ ਦਾ ਸਾਰਾ ਹਿਸਾਬ-ਕਿਤਾਬ ਹੁਣ ਮੋਬਾਈਲ 'ਤੇ, ਜਮਾਂ ਸੌਖੇ ਤਰੀਕੇ ਨਾਲ।">
+
+    <!-- ਨੋਰਮਲ ਸਰਚ ਇੰਜਨ ਲਈ -->
+    <meta name="description" content="ਦੁੱਧ ਦਾ ਸਾਰਾ ਹਿਸਾਬ-ਕਿਤਾਬ ਹੁਣ ਮੋਬਾਈਲ 'ਤੇ, ਜਮਾਂ ਸੌਖੇ ਤਰੀਕੇ ਨਾਲ।">
+    <meta name="image"
+        content="https://arshdhaliwal13.github.io/Dairycare_Pro/assets/images/403a3bb2-e784-420c-be62-8d9d433a7dc3.webp">
+
+    <!-- Open Graph / WhatsApp / Facebook Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arshdhaliwal13.github.io/Dairycare_Pro/">
+    <meta property="og:title" content="DairyCare Pro - ਡੇਅਰੀ ਦਾ ਡਿਜੀਟਲ ਹਿਸਾਬ-ਕਿਤਾਬ">
+    <meta property="og:description" content="ਦੁੱਧ ਦਾ ਸਾਰਾ ਹਿਸਾਬ-ਕਿਤਾਬ ਹੁਣ ਮੋਬਾਈਲ 'ਤੇ, ਜਮਾਂ ਸੌਖੇ ਤਰੀਕੇ ਨਾਲ।">
+    <meta property="og:image"
+        content="https://arshdhaliwal13.github.io/Dairycare_Pro/assets/images/403a3bb2-e784-420c-be62-8d9d433a7dc3.webp">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="DairyCare Pro">
+
+    <!-- Twitter / X Preview -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://arshdhaliwal13.github.io/Dairycare_Pro/">
+    <meta property="twitter:title" content="DairyCare Pro - ਡੇਅਰੀ ਦਾ ਡਿਜੀਟਲ ਹਿਸਾਬ-ਕਿਤਾਬ">
+    <meta property="twitter:description" content="ਦੁੱਧ ਦਾ ਸਾਰਾ ਹਿਸਾਬ-ਕਿਤਾਬ ਹੁਣ ਮੋਬਾਈਲ 'ਤੇ, ਜਮਾਂ ਸੌਖੇ ਤਰੀਕੇ ਨਾਲ।">
+    <meta property="twitter:image"
+        content="https://arshdhaliwal13.github.io/Dairycare_Pro/assets/images/403a3bb2-e784-420c-be62-8d9d433a7dc3.webp">
+
+    <meta property="og:see_also" content="https://arshdhaliwal13.github.io/Dairycare_Pro/">
+
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="components/marquee.css">
 </head>
@@ -14,7 +39,7 @@
 <body class="loading">
     <div id="marquee-placeholder"></div>
     <div id="header-placeholder"></div>
-    
+
     <main id="app-content">
         <!-- Cards Grid - Homepage Content -->
         <div class="cards-grid">
@@ -72,7 +97,7 @@
             </p>
         </div>
     </div>
-    
+
     <div id="footer-placeholder"></div>
 
     <!-- scripts -->
@@ -89,10 +114,10 @@
         }
 
         // 2. Navigation functions (Global Scope)
-        window.navigateLegal = function(pageName) {
+        window.navigateLegal = function (pageName) {
             window.location.href = getAppBasePath() + 'legal/' + pageName;
         };
-        window.navigateRoot = function(pageName) {
+        window.navigateRoot = function (pageName) {
             window.location.href = getAppBasePath() + pageName;
         };
 
@@ -112,7 +137,7 @@
                     document.getElementById(comp.id).innerHTML = await response.text();
                 } catch (error) {
                     console.warn(`Fallback for ${comp.id}:`, error);
-                    
+
                     if (comp.id === 'marquee-placeholder') {
                         document.getElementById(comp.id).innerHTML = `
                             <div class="ticker-wrap" style="text-align:center; padding:0.5rem 0; font-weight:bold;">
@@ -137,7 +162,7 @@
         }
 
         // 4. Start after page load (With Safe Safeguard)
-        window.onload = async function() {
+        window.onload = async function () {
             try {
                 await loadComponents();
             } catch (globalError) {
@@ -149,14 +174,14 @@
         };
 
         // 5. Helper functions for modal (Global Scope)
-        window.copyEmail = function() {
+        window.copyEmail = function () {
             const email = 'kjaspal483@gmail.com';
             navigator.clipboard.writeText(email)
                 .then(() => alert('ਈਮੇਲ ਕਾਪੀ ਹੋ ਗਈ!'))
                 .catch(() => alert('ਕਾਪੀ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ, ਕਿਰਪਾ ਕਰਕੇ ਹੱਥੀਂ ਕਾਪੀ ਕਰੋ।'));
         };
 
-        window.closeModal = function() {
+        window.closeModal = function () {
             const modal = document.getElementById('contactModal');
             if (modal) {
                 modal.style.display = 'none';
@@ -164,7 +189,7 @@
         };
 
         // ਮੋਡਲ ਤੋਂ ਬਾਹਰ ਕਲਿੱਕ ਕਰਨ 'ਤੇ ਬੰਦ ਕਰਨ ਲਈ
-        window.addEventListener('click', function(event) {
+        window.addEventListener('click', function (event) {
             const modal = document.getElementById('contactModal');
             if (modal && event.target === modal) {
                 modal.style.display = 'none';
