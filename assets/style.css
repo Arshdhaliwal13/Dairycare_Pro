@@ -247,14 +247,14 @@ main {
 }
 
 .version-badge {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    padding: 4px 10px;
-    font-size: 0.7rem;
-    font-weight: normal;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* ਵਰਜ਼ਨ ਨੂੰ ਜਮਾਂ ਸੱਜੇ ਪਾਸੇ ਰੱਖਣ ਲਈ */
+    flex: 1;
 }
 
 .version-text {
-    color: white;
+    color: rgba(255, 255, 255, 0.8); /* ਸਾਫ਼ ਚਿੱਟਾ ਰੰਗ */
     font-family: monospace;
+    font-size: 0.8rem; /* ਬਿਲਕੁਲ ਸਹੀ ਸਾਈਜ਼ */
 }
