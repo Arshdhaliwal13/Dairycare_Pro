@@ -1,13 +1,35 @@
 <header class="site-header">
-    <div class="container header-flex">
-        <!-- ਲੋਗੋ ਨੂੰ ਹੀ ਹੋਮ ਬਟਨ ਬਣਾ ਦਿੱਤਾ, ਹੁਣ ਇਹ ਜਮਾਂ ਸਟਾਈਲਿਸ਼ ਲੱਗੇਗਾ -->
-        <a href="https://arshdhaliwal13.github.io/Dairycare_Pro/" class="logo" style="text-decoration: none;">
-            <span class="logo-text">🐄 DairyCare Pro</span>
-        </a>
+    <div class="container header-flex" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
         
-        <!-- ਵਰਜ਼ਨ ਬੈਜ ਆਪਣੀ ਜਗ੍ਹਾ 'ਤੇ ਸੈੱਟ ਰਹੇਗਾ -->
-        <div class="version-badge">
+        <!-- 1. ਖੱਬੇ ਪਾਸੇ: ਲੋਗੋ -->
+        <div class="logo" style="flex: 1; text-align: left;">
+            <span class="logo-text">🐄 DairyCare Pro</span>
+        </div>
+        
+        <!-- 2. ਬਿਲਕੁਲ ਸੈਂਟਰ ਵਿੱਚ: ਸਟਾਈਲਿਸ਼ ਹੋਮ ਬਟਨ -->
+        <div style="flex: 1; text-align: center;">
+            <a href="https://arshdhaliwal13.github.io/Dairycare_Pro/" class="nav-link" style="
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 14px;
+                background-color: rgba(37, 99, 235, 0.1); /* ਹਲਕਾ ਨੀਲਾ ਸ਼ੇਡ */
+                color: #2563eb; /* ਗੂੜਾ ਨੀਲਾ ਰੰਗ */
+                text-decoration: none;
+                border: 1px solid #2563eb;
+                border-radius: 20px; /* ਗੋਲਾਈ ਵਾਲਾ ਸਟਾਈਲਿਸ਼ ਬਟਨ */
+                font-weight: bold;
+                font-size: 14px;
+                transition: all 0.3s ease;
+            ">
+                🏠 ਹੋਮ (Home)
+            </a>
+        </div>
+        
+        <!-- 3. ਸੱਜੇ ਪਾਸੇ: ਵਰਜ਼ਨ ਬੈਜ -->
+        <div class="version-badge" style="flex: 1; text-align: right;">
             <span id="appVersion" class="version-text">v?</span>
         </div>
+
     </div>
 </header>
