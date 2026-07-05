@@ -99,7 +99,7 @@ function generatePDF() {
             <h1 style="color: #2a9d8f; margin: 0;">${displayDairyName}</h1>
             <p style="font-size: 12px; margin: 2px 0;"><strong>ਮਾਲਕ:</strong> ${settings.dairyOwner || ''} | <strong>ਪਤਾ:</strong> ${settings.dairyAddress || ''} | 📞 ${settings.dairyPhone || ''}</p>
             <hr style="border: 1px solid #2a9d8f; width: 80%;">
-            <h2 style="color: #2c3e50; margin: 5px 0;">ਕੱਚਾ ਹਿਸਾਬ ਰਿਪੋਰਟ</h2>
+            <h2 style="color: #2c3e50; margin: 5px 0;">❌ਹਿਸਾਬ ਰਿਪੋਰਟ❌</h2>
             <p style="font-size: 12px; margin: 2px 0;"><strong>ਕਿਸਾਨ:</strong> ${farmerName} | <strong>ਕਿਸਾਨ ਦਾ ਫ਼ੋਨ:</strong> ${farmerPhone}</p>
             <p style="font-size: 12px; margin: 2px 0;"><strong>ਮਿਤੀ ਰੇਂਜ:</strong> ${dateRangeText}</p>
         </div>
