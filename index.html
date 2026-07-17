@@ -223,6 +223,41 @@
             }
         });
     </script>
+
+    <!-- ਗੂਗਲ ਟ੍ਰਾਂਸਲੇਟਰ ਦਾ ਮੇਨ ਐਲੀਮੈਂਟ (ਇਹਨੂੰ ਲੁਕਾ ਕੇ ਰੱਖਾਂਗੇ ਤਾਂ ਜੋ ਭਾਸ਼ਾ ਆਪਣੇ ਆਪ ਬਦਲੇ) -->
+<div id="google_translate_element" style="display:none;"></div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'pa', // ਤੁਹਾਡੀ ਸਾਈਟ ਦੀ ਅਸਲੀ ਕੋਡਿੰਗ ਭਾਸ਼ਾ
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+  }, 'google_translate_element');
+  
+  // ਜਦੋਂ ਟ੍ਰਾਂਸਲੇਟਰ ਲੋਡ ਹੋ ਜਾਵੇ, ਉਦੋਂ ਯੂਜ਼ਰ ਦੀ ਭਾਸ਼ਾ ਪਛਾਣੋ
+  setTimeout(autoTranslate, 1000);
+}
+
+function autoTranslate() {
+  // 1. ਯੂਜ਼ਰ ਦੇ ਫੋਨ/ਬ੍ਰਾਊਜ਼ਰ ਦੀ ਭਾਸ਼ਾ ਪਤਾ ਕਰੋ (e.g., 'hi', 'gu', 'en')
+  let userLang = navigator.language || navigator.userLanguage; 
+  userLang = userLang.split('-')[0]; // ਸਿਰਫ਼ ਮੇਨ ਕੋਡ ਲਵੋ
+
+  // ਭਾਰਤ ਦੀਆਂ ਮੁੱਖ ਭਾਸ਼ਾਵਾਂ ਦੇ ਕੋਡ
+  const supportedLanguages = ['hi', 'en', 'gu', 'mr', 'ta', 'te', 'kn', 'ml', 'bn', 'or', 'as'];
+
+  // ਜੇਕਰ ਯੂਜ਼ਰ ਦੀ ਭਾਸ਼ਾ ਪੰਜਾਬੀ (pa) ਨਹੀਂ ਹੈ ਅਤੇ ਸਾਡੀ ਲਿਸਟ ਵਿੱਚ ਹੈ, ਤਾਂ ਆਟੋ-ਟ੍ਰਾਂਸਲੇਟ ਕਰੋ
+  if (userLang !== 'pa' && supportedLanguages.includes(userLang)) {
+    const selectEl = document.querySelector('.goog-te-combo');
+    if (selectEl) {
+      selectEl.value = userLang;
+      // ਗੂਗਲ ਟ੍ਰਾਂਸਲੇਟ ਨੂੰ ਦੱਸੋ ਕਿ ਭਾਸ਼ਾ ਬਦਲ ਦਿੱਤੀ ਗਈ ਹੈ
+      selectEl.dispatchEvent(new Event('change'));
+    }
+  }
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 
 </html>
