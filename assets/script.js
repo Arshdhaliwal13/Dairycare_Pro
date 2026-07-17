@@ -92,7 +92,7 @@ document.addEventListener('click', async (event) => {
 });
 
 // Version display (sync with sw.js)
-const APP_VERSION = 'v6.8';
+const APP_VERSION = 'v6.9';
 
 let versionRetryCount = 0;
 const MAX_RETRIES = 20;
