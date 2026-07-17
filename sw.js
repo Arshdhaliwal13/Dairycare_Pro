@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dairycare-v6.8';
+const CACHE_NAME = 'dairycare-v6.9';
 const BASE_PATH = '/Dairycare_Pro/';
 
 const urlsToCache = [
@@ -26,8 +26,13 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
+
 // Fetch Event – Stale-While-Revalidate (best for updates)
 self.addEventListener('fetch', event => {
+  // 👑 ਆਹ ਲਾਈਨਾਂ ਇੱਥੇ ਐਡ ਹੋ ਗਈਆਂ ਨੇ
+  if (event.request.method !== 'GET' || event.request.url.includes('translate.googleapis.com')) {
+    return; // ਇਹਨੂੰ ਸਿੱਧਾ ਨੈੱਟ 'ਤੇ ਜਾਣ ਦਿਓ, ਕੈਸ਼ੇ ਬਾਕਸ ਵਿੱਚ ਨਾ ਪਾਓ
+  }
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {
       // Background fetch to update cache
