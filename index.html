@@ -224,37 +224,60 @@
         });
     </script>
 
-    <!-- ਗੂਗਲ ਟ੍ਰਾਂਸਲੇਟਰ ਦਾ ਮੇਨ ਐਲੀਮੈਂਟ (ਇਹਨੂੰ ਲੁਕਾ ਕੇ ਰੱਖਾਂਗੇ ਤਾਂ ਜੋ ਭਾਸ਼ਾ ਆਪਣੇ ਆਪ ਬਦਲੇ) -->
+    <!-- ਗੂਗਲ ਟ੍ਰਾਂਸਲੇਟਰ ਦਾ ਮੇਨ ਐਲੀਮੈਂਟ -->
 <div id="google_translate_element" style="display:none;"></div>
 
 <script type="text/javascript">
+let currentTargetLang = 'pa'; // ਡਿਫਾਲਟ ਭਾਸ਼ਾ ਪੰਜਾਬੀ ਰੱਖਾਂਗੇ
+
 function googleTranslateElementInit() {
   new google.translate.TranslateElement({
-    pageLanguage: 'pa', // ਤੁਹਾਡੀ ਸਾਈਟ ਦੀ ਅਸਲੀ ਕੋਡਿੰਗ ਭਾਸ਼ਾ
+    pageLanguage: 'pa',
     layout: google.translate.TranslateElement.InlineLayout.SIMPLE
   }, 'google_translate_element');
   
-  // ਜਦੋਂ ਟ੍ਰਾਂਸਲੇਟਰ ਲੋਡ ਹੋ ਜਾਵੇ, ਉਦੋਂ ਯੂਜ਼ਰ ਦੀ ਭਾਸ਼ਾ ਪਛਾਣੋ
   setTimeout(autoTranslate, 1000);
 }
 
 function autoTranslate() {
-  // 1. ਯੂਜ਼ਰ ਦੇ ਫੋਨ/ਬ੍ਰਾਊਜ਼ਰ ਦੀ ਭਾਸ਼ਾ ਪਤਾ ਕਰੋ (e.g., 'hi', 'gu', 'en')
   let userLang = navigator.language || navigator.userLanguage; 
-  userLang = userLang.split('-')[0]; // ਸਿਰਫ਼ ਮੇਨ ਕੋਡ ਲਵੋ
+  userLang = userLang.split('-')[0];
 
-  // ਭਾਰਤ ਦੀਆਂ ਮੁੱਖ ਭਾਸ਼ਾਵਾਂ ਦੇ ਕੋਡ
   const supportedLanguages = ['hi', 'en', 'gu', 'mr', 'ta', 'te', 'kn', 'ml', 'bn', 'or', 'as'];
 
-  // ਜੇਕਰ ਯੂਜ਼ਰ ਦੀ ਭਾਸ਼ਾ ਪੰਜਾਬੀ (pa) ਨਹੀਂ ਹੈ ਅਤੇ ਸਾਡੀ ਲਿਸਟ ਵਿੱਚ ਹੈ, ਤਾਂ ਆਟੋ-ਟ੍ਰਾਂਸਲੇਟ ਕਰੋ
   if (userLang !== 'pa' && supportedLanguages.includes(userLang)) {
-    const selectEl = document.querySelector('.goog-te-combo');
-    if (selectEl) {
-      selectEl.value = userLang;
-      // ਗੂਗਲ ਟ੍ਰਾਂਸਲੇਟ ਨੂੰ ਦੱਸੋ ਕਿ ਭਾਸ਼ਾ ਬਦਲ ਦਿੱਤੀ ਗਈ ਹੈ
-      selectEl.dispatchEvent(new Event('change'));
-    }
+    currentTargetLang = userLang; // ਜਿਹੜੀ ਭਾਸ਼ਾ ਯੂਜ਼ਰ ਦੀ ਹੈ, ਉਹਨੂੰ ਸੇਵ ਕਰ ਲਵੋ
+    applyTranslation(userLang);
+    
+    // 👑 ਜਾਸੂਸ ਸਿਸਟਮ ਸ਼ੁਰੂ: ਜਦੋਂ ਵੀ JavaScript ਪੇਜ ਬਦਲੇਗੀ, ਇਹ ਆਪੇ ਟ੍ਰਾਂਸਲੇਟ ਕਰੇਗਾ
+    startPageWatcher();
   }
+}
+
+function applyTranslation(langCode) {
+  const selectEl = document.querySelector('.goog-te-combo');
+  if (selectEl && selectEl.value !== langCode) {
+    selectEl.value = langCode;
+    selectEl.dispatchEvent(new Event('change'));
+  }
+}
+
+// 🕵️‍♂️ ਇਹ ਫੰਕਸ਼ਨ ਪੂਰੇ ਪੇਜ 'ਤੇ ਨਜ਼ਰ ਰੱਖਦਾ ਹੈ (MutationObserver)
+function startPageWatcher() {
+  const observer = new MutationObserver((mutations) => {
+    // ਜਦੋਂ ਵੀ HTML ਵਿੱਚ ਕੋਈ ਬਦਲਾਅ ਹੋਵੇ, ਗੂਗਲ ਨੂੰ ਦੁਬਾਰਾ ਅਨੁਵਾਦ ਕਰਨ ਲਈ ਕਹੋ
+    observer.disconnect(); // ਲੂਪ ਤੋਂ ਬਚਣ ਲਈ 1 ਸੈਕਿੰਡ ਲਈ ਜਾਸੂਸ ਬੰਦ ਕਰੋ
+    
+    applyTranslation(currentTargetLang);
+    
+    // ਦੁਬਾਰਾ ਜਾਸੂਸੀ ਸ਼ੁਰੂ ਕਰੋ
+    setTimeout(() => {
+      observer.observe(document.body, { childList: true, subtree: true });
+    }, 300);
+  });
+
+  // ਪੂਰੀ body 'ਤੇ ਨਜ਼ਰ ਰੱਖੋ
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 </script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
