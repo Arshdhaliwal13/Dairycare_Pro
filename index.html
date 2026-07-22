@@ -223,8 +223,7 @@
             }
         });
     </script>
-
-    <!-- 🌐 1. ਸਮਾਰਟ ਭਾਸ਼ਾ ਪੌਪ-ਅੱਪ UI -->
+<!-- 🌐 1. ਸਮਾਰਟ ਭਾਸ਼ਾ ਪੌਪ-ਅੱਪ UI -->
 <div id="smart-lang-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 99999; justify-content: center; align-items: center; font-family: system-ui, -apple-system, sans-serif;">
   <div style="background: #ffffff; padding: 25px; border-radius: 14px; width: 90%; max-width: 380px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); position: relative;">
     
@@ -252,7 +251,7 @@
 <!-- ⚙️ ਗੂਗਲ ਟ੍ਰਾਂਸਲੇਟਰ (ਲੁਕਿਆ ਹੋਇਆ ਐਲੀਮੈਂਟ) -->
 <div id="google_translate_element" style="display:none;"></div>
 
-<!-- 📜 ਜਾਵਾਸਕ੍ਰਿਪਟ ਲੌਜਿਕ -->
+<!-- 📜 ਜਾਵਾਸਕ੍ਰਿਪਟ ਲੌਜਿਕ (ਪੂਰੀ ਵੈੱਬਸਾਈਟ Translate ਕਰਨ ਲਈ Updated) -->
 <script type="text/javascript">
 let detectedLang = 'pa';
 let currentTargetLang = 'pa';
@@ -280,7 +279,6 @@ function googleTranslateElementInit() {
 function initSmartLanguageCheck() {
   let savedLang = localStorage.getItem('user_preferred_lang');
   
-  // ਜੇਕਰ ਯੂਜ਼ਰ ਪਹਿਲਾਂ ਭਾਸ਼ਾ ਸਿਲੈਕਟ ਕਰ ਚੁੱਕਾ ਹੈ
   if (savedLang) {
     if (savedLang !== 'pa') {
       currentTargetLang = savedLang;
@@ -293,19 +291,16 @@ function initSmartLanguageCheck() {
   // ਫੋਨ/ਬ੍ਰਾਊਜ਼ਰ ਦੀ ਭਾਸ਼ਾ ਡਿਟੈਕਟ ਕਰੋ
   let userLang = (navigator.language || navigator.userLanguage || 'pa').split('-')[0];
 
-  // ਜੇਕਰ ਡਿਟੈਕਟ ਹੋਈ ਭਾਸ਼ਾ ਸਾਡੀ ਲਿਸਟ ਵਿੱਚ ਹੈ, ਤਾਂ ਪੌਪ-ਅੱਪ ਦਿਖਾਓ (ਨਹੀਂ ਤਾਂ ਡਿਫਾਲਟ pa)
   if (langMessages[userLang]) {
     detectedLang = userLang;
   } else {
     detectedLang = 'pa';
   }
 
-  // ਪੌਪ-ਅੱਪ 'ਚ ਸੁਨੇਹਾ ਸੈੱਟ ਕਰੋ
   document.getElementById('popup-detected-title').innerText = langMessages[detectedLang].title;
   document.getElementById('popup-detected-msg').innerText = langMessages[detectedLang].msg;
   document.getElementById('popup-confirm-btn').innerText = langMessages[detectedLang].btn;
   
-  // ਪੌਪ-ਅੱਪ ਓਪਨ ਕਰੋ
   document.getElementById('smart-lang-popup').style.display = 'flex';
 }
 
@@ -326,17 +321,28 @@ function closePopupDefault() {
   localStorage.setItem('user_preferred_lang', 'pa');
   document.getElementById('smart-lang-popup').style.display = 'none';
   
+  // Cookie ਸਾਫ਼ ਕਰੋ
+  document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + location.host;
+
   if (currentTargetLang !== 'pa') {
     window.location.reload();
   }
 }
 
-// 5. ਗੂਗਲ ਟ੍ਰਾਂਸਲੇਟ ਅਪਲਾਈ ਕਰਨ ਵਾਲਾ ਫੰਕਸ਼ਨ
-function applyTranslation(langCode) {
+// 5. ਗੂਗਲ ਟ੍ਰਾਂਸਲੇਟ ਅਪਲਾਈ ਕਰਨ ਵਾਲਾ ਫੰਕਸ਼ਨ (ਜੋ ਪੂਰੀ ਵੈੱਬਸਾਈਟ English ਕਰੇਗਾ)
+function applyTranslation(langCode, attempts = 0) {
+  // Direct Google Cookie Set (Forced Translation)
+  document.cookie = `googtrans=/pa/${langCode}; path=/;`;
+  document.cookie = `googtrans=/pa/${langCode}; path=/; domain=.${location.host}`;
+
   const selectEl = document.querySelector('.goog-te-combo');
   if (selectEl) {
     selectEl.value = langCode;
     selectEl.dispatchEvent(new Event('change'));
+  } else if (attempts < 10) {
+    // ਜੇਕਰ ਗੂਗਲ ਦਾ ਡ੍ਰੌਪਡਾਊਨ ਲੋਡ ਹੋਣ 'ਚ ਸਮਾਂ ਲਵੇ, ਤਾਂ 10 ਵਾਰ ਦੁਬਾਰਾ ਟਰਾਈ ਕਰੇਗਾ
+    setTimeout(() => applyTranslation(langCode, attempts + 1), 300);
   }
 }
 
@@ -347,13 +353,13 @@ function startPageWatcher() {
     applyTranslation(currentTargetLang);
     setTimeout(() => {
       observer.observe(document.body, { childList: true, subtree: true });
-    }, 300);
+    }, 500);
   });
   observer.observe(document.body, { childList: true, subtree: true });
 }
 </script>
 
 <!-- ਗੂਗਲ ਟ੍ਰਾਂਸਲੇਟ ਸਕ੍ਰਿਪਟ -->
-<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script></body>
-
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
 </html>
