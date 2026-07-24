@@ -42,8 +42,6 @@
 
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="components/marquee.css">
-    <!-- Google Sitemap Link -->
-<link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml">
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7Q4H10B7KV"></script>
 <script>
@@ -51,7 +49,14 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-7Q4H10B7KV');
+  // Check if running on local file system or actual domain
+  if (location.protocol === 'file:') {
+    gtag('config', 'G-7Q4H10B7KV', {
+      'client_storage': 'none' // local testing ਵੇਲੇ ਕੂਕੀ ਬਣਾਉਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਨਹੀਂ ਕਰੇਗਾ
+    });
+  } else {
+    gtag('config', 'G-7Q4H10B7KV');
+  }
 </script>
     <script type="application/ld+json">
 {
@@ -90,7 +95,7 @@
             <a href="reports/reports.html" class="card">
                 <div class="card-icon">📊</div>
                 <h3 class="card-title punjabi">ਰਿਪੋਰਟਾਂ</h3>
-                <p class="card-desc punjabi">PDF, ਗ੍ਰਾਫ਼,ਡਾਊਨਲੋਡ</p>
+                <p class="card-desc punjabi">PDF,ਗ੍ਰਾਫ਼,ਡਾਊਨਲੋਡ</p>
                 <span class="card-badge">Reports</span>
             </a>
 
