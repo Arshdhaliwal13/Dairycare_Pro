@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dairycare-v7.1';
+const CACHE_NAME = 'dairycare-v7.2';
 const BASE_PATH = '/Dairycare_Pro/';
 
 const urlsToCache = [
