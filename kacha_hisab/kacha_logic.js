@@ -80,15 +80,6 @@ function autoMoveShiftAfterSave(savedShift) {
     } else if (savedShift === 'evening') {
         shiftMorning.checked = true;
         document.getElementById('shiftDisplay').value = 'ਸਵੇਰ (Morning)';
-        let currentDate = document.getElementById('entryDate').value;
-        if (currentDate) {
-            let nextDate = new Date(currentDate);
-            nextDate.setDate(nextDate.getDate() + 1);
-            let ny = nextDate.getFullYear();
-            let nm = String(nextDate.getMonth() + 1).padStart(2, '0');
-            let nd = String(nextDate.getDate()).padStart(2, '0');
-            document.getElementById('entryDate').value = `${ny}-${nm}-${nd}`;
-        }
         updateShiftDisplay();
     }
 }
