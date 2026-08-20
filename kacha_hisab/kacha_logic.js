@@ -25,33 +25,40 @@ function setCurrentDate() {
 function getCurrentRates() {
     const settings = loadSettings();
     const animal = document.querySelector('input[name="animalType"]:checked').value;
-    let fixedRate = 0, fatRatePerFat = 0;
+    let fixedRate = 0, fatRatePerFat = 0, snfRatePerSnf = 0;
     if (animal === 'buffalo') {
         fixedRate = settings.buffaloFixedRate || 45;
         fatRatePerFat = settings.buffaloFatRate || 7.80;
+        snfRatePerSnf = 0;
     } else {
         fixedRate = settings.cowFixedRate || 40;
         fatRatePerFat = settings.cowFatRate || 7.00;
+        snfRatePerSnf = settings.cowSnfRate || 5.00;
     }
-    return { fixedRate, fatRatePerFat };
+    return { fixedRate, fatRatePerFat, snfRatePerSnf };
 }
 
 function calculateTotal() {
     const milk = parseFloat(document.getElementById('milkLiter').value) || 0;
-    const { fixedRate, fatRatePerFat } = getCurrentRates();
+    const { fixedRate, fatRatePerFat, snfRatePerSnf } = getCurrentRates();
     const rateType = document.querySelector('input[name="rateType"]:checked').value;
+    const animal = document.querySelector('input[name="animalType"]:checked').value;
     let rate = 0;
     if (rateType === 'fixed') {
         rate = fixedRate;
     } else {
         const fatPercent = parseFloat(document.getElementById('fatPercent').value) || 0;
         rate = fatPercent * fatRatePerFat;
+        if (animal === 'cow') {
+            const snfPercent = parseFloat(document.getElementById('snfPercent').value) || 0;
+            rate += snfPercent * snfRatePerSnf;
+        }
     }
     const total = milk * rate;
     document.getElementById('totalAmount').value = total.toFixed(2);
-    // Update disabled rate display fields
     document.getElementById('fixedRate').value = fixedRate.toFixed(2);
     document.getElementById('fatRatePerFat').value = fatRatePerFat.toFixed(2);
+    document.getElementById('snfRatePerSnf').value = snfRatePerSnf.toFixed(2); // ✅ ਨਵੀਂ
 }
 
 // ==================== UPDATE MAIN FORM FROM SETTINGS ====================
@@ -65,8 +72,17 @@ function updateMainFormFromSettings() {
 // ==================== TOGGLE RATE TYPE ROWS ====================
 function toggleRateType() {
     const isFixed = document.querySelector('input[name="rateType"]:checked').value === 'fixed';
+    const animal = document.querySelector('input[name="animalType"]:checked').value;
     document.getElementById('fixedRateRow').style.display = isFixed ? 'flex' : 'none';
     document.getElementById('fatRateRow').style.display = isFixed ? 'none' : 'flex';
+
+    const snfRow = document.getElementById('snfRateRow');
+    if (!isFixed && animal === 'cow') {
+        snfRow.style.display = 'flex';
+    } else {
+        snfRow.style.display = 'none';
+        document.getElementById('snfPercent').value = '';
+    }
     calculateTotal();
 }
 
@@ -125,15 +141,19 @@ function saveEntry() {
     const shiftDisplay = shift === 'morning' ? 'ਸਵੇਰ (Morning)' : 'ਸ਼ਾਮ (Evening)';
     const animal = document.querySelector('input[name="animalType"]:checked').value; // 'buffalo' or 'cow'
     const rateType = document.querySelector('input[name="rateType"]:checked').value;
-    const { fixedRate, fatRatePerFat } = getCurrentRates();
-    let rate = 0, fatPercent = 0;
+    const { fixedRate, fatRatePerFat, snfRatePerSnf } = getCurrentRates();
+    let rate = 0, fatPercent = 0, snfPercent = 0;
+
     if (rateType === 'fixed') {
         rate = fixedRate;
     } else {
         fatPercent = parseFloat(document.getElementById('fatPercent').value) || 0;
-        rate = fatPercent * fatRatePerFat;
+        // ਸਿਰਫ ਗਾਂ ਲਈ ਹੀ SNF ਗਿਣੋ
+        snfPercent = (animal === 'cow') ? (parseFloat(document.getElementById('snfPercent')?.value) || 0) : 0;
+        rate = (fatPercent * fatRatePerFat) + (snfPercent * snfRatePerSnf);
     }
-    const total = milk * rate;
+
+    const total = milk * rate; // total calculation
 
     const entry = {
         id: editMode ? editId : Date.now() + Math.random(),
@@ -147,6 +167,7 @@ function saveEntry() {
         rateType: rateType,
         fixedRate: fixedRate,
         fatPercent: fatPercent,
+        snfPercent: snfPercent,          // ✅ new
         fatRatePerFat: fatRatePerFat,
         rate: rate,
         total: total
@@ -194,15 +215,27 @@ function editEntry(id) {
     document.querySelector(`input[name="animalType"][value="${entry.animal}"]`).checked = true;
     document.querySelector(`input[name="shiftChoice"][value="${entry.shift}"]`).checked = true;
     updateShiftDisplay();
+
+    // Rate type set ਕਰੋ
+    document.querySelector(`input[name="rateType"][value="${entry.rateType}"]`).checked = true;
+
+    // ✅ 1. SNF row visibility ਪਹਿਲਾਂ set ਕਰੋ
+    toggleRateType();
+
+    // ਹੁਣ values set ਕਰੋ
     const settings = loadSettings();
     document.getElementById('farmerName').value = settings.defaultFarmerName || entry.farmer;
     document.getElementById('milkLiter').value = entry.milk;
-    document.querySelector(`input[name="rateType"][value="${entry.rateType}"]`).checked = true;
+
     if (entry.rateType === 'fat') {
         document.getElementById('fatPercent').value = entry.fatPercent;
+        if (entry.animal === 'cow' && document.getElementById('snfPercent')) {
+            document.getElementById('snfPercent').value = entry.snfPercent || '';
+        }
     }
+
+    // ✅ 2. ਹੁਣ calculate ਕਰੋ (SNF value ਸ਼ਾਮਲ ਹੋਵੇਗੀ)
     calculateTotal();
-    toggleRateType();
 
     document.getElementById('saveEntryBtn').innerHTML = '✏️ ਅੱਪਡੇਟ ਕਰੋ (Enter)';
     document.getElementById('milkLiter').focus();
@@ -261,11 +294,12 @@ function setupEventListeners() {
     });
 
     document.querySelectorAll('input[name="rateType"]').forEach(r => r.addEventListener('change', toggleRateType));
-    document.querySelectorAll('input[name="animalType"]').forEach(r => r.addEventListener('change', calculateTotal));
+    document.querySelectorAll('input[name="animalType"]').forEach(r => r.addEventListener('change', toggleRateType));
 
     const milkLiter = document.getElementById('milkLiter');
     milkLiter.addEventListener('input', calculateTotal);
     document.getElementById('fatPercent').addEventListener('input', calculateTotal);
+    document.getElementById('snfPercent')?.addEventListener('input', calculateTotal); // ✅ new
 
     milkLiter.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
