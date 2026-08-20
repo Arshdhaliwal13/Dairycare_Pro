@@ -44,6 +44,13 @@ function populateSettingsForm() {
 
 function handleSettingsSubmit(event) {
     event.preventDefault();
+
+    // 🔧 ਛੋਟਾ ਫੰਕਸ਼ਨ: ਜੇਕਰ 0 ਪਾਓਗੇ ਤਾਂ 0 ਸੇਵ ਹੋਵੇਗਾ, ਖਾਲੀ ਛੱਡਿਆ ਤਾਂ ਡਿਫੌਲਟ ਆਵੇਗਾ
+    const getSafeRate = (id, defaultVal) => {
+        const val = parseFloat(document.getElementById(id).value);
+        return !isNaN(val) ? val : defaultVal;
+    };
+
     const settings = {
         dairyName: document.getElementById('dairyName').value.trim(),
         dairyOwner: document.getElementById('dairyOwner').value.trim(),
@@ -51,14 +58,17 @@ function handleSettingsSubmit(event) {
         dairyPhone: document.getElementById('dairyPhone').value.trim(),
         defaultFarmerName: document.getElementById('defaultFarmerName').value.trim(),
         defaultFarmerPhone: document.getElementById('defaultFarmerPhone').value.trim(),
-        buffaloFixedRate: parseFloat(document.getElementById('buffaloFixedRate').value) || defaultSettings.buffaloFixedRate,
-        cowFixedRate: parseFloat(document.getElementById('cowFixedRate').value) || defaultSettings.cowFixedRate,
-        buffaloFatRate: parseFloat(document.getElementById('buffaloFatRate').value) || defaultSettings.buffaloFatRate,
-        cowFatRate: parseFloat(document.getElementById('cowFatRate').value) || defaultSettings.cowFatRate,
-        cowSnfRate: parseFloat(document.getElementById('cowSnfRate').value) || defaultSettings.cowSnfRate  // ✅ added
+
+        // ✨ ਸਿਰਫ਼ ਇਹ 5 ਲਾਈਨਾਂ ਫਿਕਸ ਹੋਈਆਂ ਹਨ (ਹੁਣ 0 ਵੀ ਸੇਵ ਹੋਵੇਗਾ)
+        buffaloFixedRate: getSafeRate('buffaloFixedRate', defaultSettings.buffaloFixedRate),
+        cowFixedRate: getSafeRate('cowFixedRate', defaultSettings.cowFixedRate),
+        buffaloFatRate: getSafeRate('buffaloFatRate', defaultSettings.buffaloFatRate),
+        cowFatRate: getSafeRate('cowFatRate', defaultSettings.cowFatRate),
+        cowSnfRate: getSafeRate('cowSnfRate', defaultSettings.cowSnfRate)
     };
+
     saveSettings(settings);
-    updateMainFormFromSettings();  // defined in kacha_logic.js
+    updateMainFormFromSettings();
     closeSettingsModal();
     alert('ਸੈਟਿੰਗਜ਼ ਸੇਵ ਹੋ ਗਈਆਂ!');
 }
