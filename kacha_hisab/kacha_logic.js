@@ -224,7 +224,7 @@ function editEntry(id) {
 
     // ਹੁਣ values set ਕਰੋ
     const settings = loadSettings();
-    document.getElementById('farmerName').value = settings.defaultFarmerName || entry.farmer;
+    document.getElementById('farmerName').value = entry.farmer || settings.defaultFarmerName;
     document.getElementById('milkLiter').value = entry.milk;
 
     if (entry.rateType === 'fat') {
