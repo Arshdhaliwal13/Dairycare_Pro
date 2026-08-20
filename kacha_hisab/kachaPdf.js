@@ -1,8 +1,18 @@
-// kachaPdf.js - Kacha Hisab PDF (based on pakkaPdf.js, working multi-page, Punjabi font)
+// kachaPdf.js - Kacha Hisab PDF (Dynamic SNF Column + Clean Dash)
 // Developed for DairyCare Pro
 
 function generatePDF() {
     const settings = loadSettings();
+
+    function sanitizeFileName(name) {
+        try {
+            // \p{L} = Letters, \p{M} = Punjabi Marks/Matras, \p{N} = Numbers
+            return name.replace(/[^\p{L}\p{M}\p{N}_\-. ]/gu, '_');
+        } catch (e) {
+            // Fallback for older browsers (English + Punjabi Unicode Range)
+            return name.replace(/[^a-zA-Z0-9\u0A00-\u0A7F_\-. ]/g, '_');
+        }
+    }
 
     const farmerName = prompt('ਕਿਸਾਨ ਦਾ ਨਾਮ ਦਰਜ ਕਰੋ:', settings.defaultFarmerName || '_____________');
     if (farmerName === null) return;
@@ -15,6 +25,8 @@ function generatePDF() {
     // Date range
     const range = document.getElementById('pdfDateRange').value;
     let startDate, endDate;
+
+    // ✅ Date range logic (fixed)
     if (range === 'all') {
         startDate = '1900-01-01';
         endDate = '2999-12-31';
@@ -62,7 +74,7 @@ function generatePDF() {
         dateRangeText = `${minDate.split('-').reverse().join('/')} ਤੋਂ ${maxDate.split('-').reverse().join('/')}`;
     }
 
-    // ---------- Create visible container (same as pakkaPdf.js) ----------
+    // ---------- Create container ----------
     const reportContainer = document.createElement('div');
     reportContainer.style.position = 'absolute';
     reportContainer.style.top = '0';
@@ -74,7 +86,6 @@ function generatePDF() {
     reportContainer.style.fontSize = '12px';
     reportContainer.style.lineHeight = '1.4';
     reportContainer.style.zIndex = '9999';
-    // No debug border
     document.body.appendChild(reportContainer);
 
     // Load Punjabi font
@@ -93,13 +104,16 @@ function generatePDF() {
     reportContainer.id = 'pdf-report-container';
     document.head.appendChild(style);
 
+    // ✅ DYNAMIC SNF COLUMN: Check if any entry has SNF data
+    const hasSnfData = filtered.some(e => e.snfPercent && e.snfPercent > 0);
+
     const displayDairyName = settings.dairyName || 'DairyCare Pro';
     let html = `
         <div style="text-align: center; margin-bottom: 10px;">
             <h1 style="color: #2a9d8f; margin: 0;">${displayDairyName}</h1>
             <p style="font-size: 12px; margin: 2px 0;"><strong>ਮਾਲਕ:</strong> ${settings.dairyOwner || ''} | <strong>ਪਤਾ:</strong> ${settings.dairyAddress || ''} | 📞 ${settings.dairyPhone || ''}</p>
             <hr style="border: 1px solid #2a9d8f; width: 80%;">
-            <h2 style="color: #2c3e50; margin: 5px 0;">❌ਹਿਸਾਬ ਰਿਪੋਰਟ❌</h2>
+            <h2 style="color: #2c3e50; margin: 5px 0;">ਹਿਸਾਬ ਰਿਪੋਰਟ</h2>
             <p style="font-size: 12px; margin: 2px 0;"><strong>ਕਿਸਾਨ:</strong> ${farmerName} | <strong>ਕਿਸਾਨ ਦਾ ਫ਼ੋਨ:</strong> ${farmerPhone}</p>
             <p style="font-size: 12px; margin: 2px 0;"><strong>ਮਿਤੀ ਰੇਂਜ:</strong> ${dateRangeText}</p>
         </div>
@@ -111,6 +125,7 @@ function generatePDF() {
                     <th style="padding: 6px; border: 1px solid #ddd;">ਦੁੱਧ (L)</th>
                     <th style="padding: 6px; border: 1px solid #ddd;">ਰੇਟ (₹)</th>
                     <th style="padding: 6px; border: 1px solid #ddd;">ਕੁੱਲ (₹)</th>
+                    ${hasSnfData ? `<th style="padding: 6px; border: 1px solid #ddd;">SNF %</th>` : ''}
                 </tr>
             </thead>
             <tbody>
@@ -120,6 +135,9 @@ function generatePDF() {
         const [y, m, d] = entry.date.split('-');
         const displayDate = `${d}/${m}/${y}`;
         const shift = entry.shiftDisplay || (entry.shift === 'morning' ? 'ਸਵੇਰ' : 'ਸ਼ਾਮ');
+        // ✅ Clean SNF display: '-' if no SNF, otherwise show value
+        const snfDisplay = (entry.snfPercent && entry.snfPercent > 0) ? entry.snfPercent.toFixed(1) : '-';
+
         html += `
             <tr>
                 <td style="padding: 4px; border: 1px solid #ddd;">${displayDate}</td>
@@ -127,6 +145,7 @@ function generatePDF() {
                 <td style="padding: 4px; border: 1px solid #ddd; text-align: right;">${entry.milk.toFixed(2)}</td>
                 <td style="padding: 4px; border: 1px solid #ddd; text-align: right;">${entry.rate.toFixed(2)}</td>
                 <td style="padding: 4px; border: 1px solid #ddd; text-align: right;">${entry.total.toFixed(2)}</td>
+                ${hasSnfData ? `<td style="padding: 4px; border: 1px solid #ddd; text-align: center;">${snfDisplay}</td>` : ''}
             </tr>
         `;
     });
@@ -152,6 +171,15 @@ function generatePDF() {
         </div>
         <div style="text-align: center; margin-top: 10px; font-size: 9px; color: #666;">
             ⚡ ਇਹ ਰਿਪੋਰਟ ਕੰਪਿਊਟਰ ਦੁਆਰਾ ਤਿਆਰ ਕੀਤੀ ਗਈ ਹੈ, ਬਿਨਾਂ ਦਸਤਖਤ ਅਤੇ ਮੋਹਰ ਦੇ ਵੈਧ ਨਹੀਂ।
+        </div>
+        <!-- Fancy Footer -->
+        <div style="text-align: center; margin-top: 8px; padding: 8px; background: linear-gradient(135deg, #2a9d8f, #264653); color: white; border-radius: 4px;">
+            <span style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;">
+                ✨ Free Digital Dairy Management Software ✨
+            </span>
+            <div style="font-size: 12px; font-weight: bold; margin-top: 2px; color: #ffe66d;">
+                DairyCare Pro (Designd by : Arshdeep Singh)
+            </div>
         </div>
     `;
 
@@ -187,16 +215,22 @@ function generatePDF() {
                     heightLeft -= pageHeight;
                     pageNum++;
                 }
-
                 const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-                const fileName = `${farmerName.replace(/\s+/g, '_')}_${timestamp}_kacha_hisab_report.pdf`;
+                const safeName = sanitizeFileName(farmerName);
+                const fileName = `${safeName.replace(/\s+/g, '_')}_${timestamp}_kacha_hisab_report.pdf`;
                 doc.save(fileName);
-                document.body.removeChild(reportContainer);
+                // ✅ Container removal moved to finally
             })
             .catch(error => {
                 console.error('PDF generation error:', error);
                 alert('PDF ਬਣਾਉਣ ਵਿੱਚ ਸਮੱਸਿਆ: ' + error.message);
-                document.body.removeChild(reportContainer);
+                // ✅ Container removal moved to finally
+            })
+            .finally(() => {
+                // ✅ Safe container removal (only if present)
+                if (reportContainer.parentNode) {
+                    document.body.removeChild(reportContainer);
+                }
             });
     }, 800);
 }
