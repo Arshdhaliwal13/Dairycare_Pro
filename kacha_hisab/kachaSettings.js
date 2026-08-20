@@ -8,10 +8,11 @@ let defaultSettings = {
     dairyPhone: '',
     defaultFarmerName: '',
     defaultFarmerPhone: '',
-    buffaloFixedRate: 45,      // ₹ per liter for Buffalo
-    cowFixedRate: 40,          // ₹ per liter for Cow
-    buffaloFatRate: 7.80,      // ₹ per fat for Buffalo
-    cowFatRate: 7.00           // ₹ per fat for Cow
+    buffaloFixedRate: 45,
+    cowFixedRate: 40,
+    buffaloFatRate: 7.80,
+    cowFatRate: 7.00,
+    cowSnfRate: 5.00           // ✅ comma added
 };
 
 function loadSettings() {
@@ -38,6 +39,7 @@ function populateSettingsForm() {
     document.getElementById('cowFixedRate').value = settings.cowFixedRate;
     document.getElementById('buffaloFatRate').value = settings.buffaloFatRate;
     document.getElementById('cowFatRate').value = settings.cowFatRate;
+    document.getElementById('cowSnfRate').value = settings.cowSnfRate !== undefined ? settings.cowSnfRate : defaultSettings.cowSnfRate;
 }
 
 function handleSettingsSubmit(event) {
@@ -52,7 +54,8 @@ function handleSettingsSubmit(event) {
         buffaloFixedRate: parseFloat(document.getElementById('buffaloFixedRate').value) || defaultSettings.buffaloFixedRate,
         cowFixedRate: parseFloat(document.getElementById('cowFixedRate').value) || defaultSettings.cowFixedRate,
         buffaloFatRate: parseFloat(document.getElementById('buffaloFatRate').value) || defaultSettings.buffaloFatRate,
-        cowFatRate: parseFloat(document.getElementById('cowFatRate').value) || defaultSettings.cowFatRate
+        cowFatRate: parseFloat(document.getElementById('cowFatRate').value) || defaultSettings.cowFatRate,
+        cowSnfRate: parseFloat(document.getElementById('cowSnfRate').value) || defaultSettings.cowSnfRate  // ✅ added
     };
     saveSettings(settings);
     updateMainFormFromSettings();  // defined in kacha_logic.js
