@@ -22,8 +22,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h1 class="page-title">⚡ ਕੱਚਾ ਹਿਸਾਬ </h1>
             <button id="settingsBtn" class="btn btn-sm"
-                style="background: transparent; border: none; font-size: 2rem; padding: 0.5rem; line-height: 1;"
-                onclick="openSettingsModal()">⚙️</button>
+                style="background: transparent; border: none; font-size: 2rem; padding: 0.5rem; line-height: 1;">⚙️</button>
         </div>
 
         <!-- Entry Form Card -->
@@ -109,6 +108,19 @@
                 <div class="form-group">
                     <label for="fatRatePerFat">💰 ਪ੍ਰਤੀ ਫੈਟ ਰੇਟ (₹)</label>
                     <input type="number" id="fatRatePerFat" class="form-control" step="0.01" min="0" disabled>
+                </div>
+            </div>
+
+            <!-- SNF Rate Row (hidden by default, shown when fat rate is selected) -->
+            <div class="form-row" id="snfRateRow" style="display: none;">
+                <div class="form-group">
+                    <label for="snfPercent">🥛 SNF %</label>
+                    <input type="number" id="snfPercent" class="form-control" step="0.1" min="0" max="12"
+                        placeholder="ਜਿਵੇਂ: 8.5">
+                </div>
+                <div class="form-group">
+                    <label for="snfRatePerSnf">💰 ਪ੍ਰਤੀ SNF ਰੇਟ (₹)</label>
+                    <input type="number" id="snfRatePerSnf" class="form-control" step="0.01" min="0" disabled>
                 </div>
             </div>
 
@@ -253,6 +265,18 @@
                     <div style="flex:1;">
                         <label for="cowFatRate">ਗਾਂ ਫੈਟ ਰੇਟ (₹/ਫੈਟ):</label>
                         <input type="number" id="cowFatRate" class="form-control" step="0.01" min="0" required>
+                    </div>
+                </div>
+
+                <!-- SNF Rate for Cow -->
+                <div class="form-row" style="gap: 1rem; margin-top: 10px;">
+                    <div style="flex:1;">
+                        <label for="cowSnfRate">ਗਾਂ SNF ਰੇਟ (₹/SNF):</label>
+                        <input type="number" id="cowSnfRate" class="form-control" step="0.01" min="0" value="5.00"
+                            required>
+                    </div>
+                    <div style="flex:1;">
+                        <!-- Empty column for spacing, or you can add buffalo SNF rate if needed -->
                     </div>
                 </div>
 
