@@ -37,7 +37,8 @@ body {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 0.8rem;  /* added gap for better wrapping */
+    gap: 0.8rem;
+    /* added gap for better wrapping */
 }
 
 /* On very small screens, center items */
@@ -46,6 +47,7 @@ body {
         justify-content: center;
         text-align: center;
     }
+
     .version-badge {
         margin-top: 0.3rem;
     }
@@ -97,6 +99,7 @@ main {
     0% {
         background-position: 200% 0;
     }
+
     100% {
         background-position: -200% 0;
     }
@@ -232,29 +235,76 @@ main {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
+
     .card {
         padding: 22px 18px;
     }
+
     .card-icon {
         font-size: 3.5rem;
     }
+
     .card-title {
         font-size: 1.5rem;
     }
+
     .card-desc {
         font-size: 1rem;
     }
 }
 
 .version-badge {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end; /* ਵਰਜ਼ਨ ਨੂੰ ਜਮਾਂ ਸੱਜੇ ਪਾਸੇ ਰੱਖਣ ਲਈ */
-    flex: 1;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    font-weight: normal;
 }
 
 .version-text {
-    color: rgba(255, 255, 255, 0.8); /* ਸਾਫ਼ ਚਿੱਟਾ ਰੰਗ */
+    color: white;
     font-family: monospace;
-    font-size: 0.8rem; /* ਬਿਲਕੁਲ ਸਹੀ ਸਾਈਜ਼ */
+}
+
+/* 🏠 Fancy Home Button CSS */
+.btn-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #20bf55 0%, #01baef 100%);
+    color: #ffffff !important;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 8px 18px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(1, 186, 239, 0.35);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(4px);
+}
+
+.btn-home:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 22px rgba(32, 191, 85, 0.5);
+    background: linear-gradient(135deg, #01baef 0%, #20bf55 100%);
+    border-color: #ffffff;
+}
+
+.btn-home:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-home .home-icon {
+    font-size: 1.1rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Mobile Screen Adjustment */
+@media (max-width: 480px) {
+    .btn-home {
+        padding: 6px 14px;
+        font-size: 0.85rem;
+    }
 }
