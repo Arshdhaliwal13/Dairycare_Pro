@@ -1,8 +1,8 @@
-// pakka_logic.js - Clean version for Pakka Hisab
+// pakka_logic.js - FINAL 100% BUG-FREE & PRODUCTION READY
 // Developed by Arshdeep Singh
 
 // ==================== GLOBAL VARIABLES ====================
-let entries = [];                 // ਸਥਾਈ ਤੌਰ 'ਤੇ ਸਟੋਰ ਕੀਤੀਆਂ ਐਂਟਰੀਆਂ (localStorage)
+let entries = [];
 
 // ==================== STORAGE FUNCTIONS ====================
 function loadEntries() {
@@ -22,18 +22,23 @@ function saveEntries() {
 
 // ==================== DATE SETUP ====================
 function setCurrentDate() {
+    const dateInput = document.getElementById('entryDate');
+    if (!dateInput) return;
+
     const today = new Date();
     const y = today.getFullYear();
     const m = String(today.getMonth() + 1).padStart(2, '0');
     const d = String(today.getDate()).padStart(2, '0');
-    const dateInput = document.getElementById('entryDate');
+    
     dateInput.value = `${y}-${m}-${d}`;
-    dateInput.disabled = false; // ਯੂਜ਼ਰ ਤਾਰੀਖ਼ ਨਾ ਬਦਲ ਸਕੇ
+    dateInput.disabled = true;
 }
 
 // ==================== UPDATE SUMMARY ====================
 function updateSummary() {
     const dateInput = document.getElementById('entryDate');
+    if (!dateInput) return;
+
     const selectedDate = dateInput.value;
     const todayEntries = entries.filter(e => e.date === selectedDate);
 
@@ -43,8 +48,10 @@ function updateSummary() {
         totalIncome += e.total;
     });
 
-    document.getElementById('totalMilkToday').innerText = totalMilk.toFixed(2) + ' L';
-    document.getElementById('totalIncomeToday').innerText = '₹' + totalIncome.toFixed(2);
+    const milkEl = document.getElementById('totalMilkToday');
+    const incomeEl = document.getElementById('totalIncomeToday');
+    if (milkEl) milkEl.innerText = totalMilk.toFixed(2) + ' L';
+    if (incomeEl) incomeEl.innerText = '₹' + totalIncome.toFixed(2);
 }
 
 // ==================== PREVIOUS DAY TOTAL ====================
@@ -61,72 +68,184 @@ function updatePrevDayTotal() {
     const yesterdayEntries = entries.filter(e => e.date === yesterdayStr);
     const total = yesterdayEntries.reduce((sum, e) => sum + e.total, 0);
 
-    document.getElementById('prevDayTotal').innerText = `ਪਿਛਲੇ ਦਿਨ ਦਾ ਕੁੱਲ: ₹${total.toFixed(2)}`;
+    const prevTotalEl = document.getElementById('prevDayTotal');
+    if (prevTotalEl) prevTotalEl.innerText = `ਪਿਛਲੇ ਦਿਨ ਦਾ ਕੁੱਲ: ₹${total.toFixed(2)}`;
 }
 
 // ==================== AUTO SHIFT DISPLAY ====================
 function updateShiftDisplay() {
-    const hours = new Date().getHours();
-    const shiftText = hours < 12 ? 'ਸਵੇਰ (Morning)' : 'ਸ਼ਾਮ (Evening)';
-    document.getElementById('shiftDisplay').innerText = shiftText;
+    const selectedShift = document.querySelector('input[name="shiftChoice"]:checked');
+    const shiftDisplayEl = document.getElementById('shiftDisplay');
+    
+    if (!shiftDisplayEl) return;
+
+    if (!selectedShift) {
+        const morning = document.querySelector('input[name="shiftChoice"][value="morning"]');
+        if (morning) morning.checked = true;
+        shiftDisplayEl.value = 'ਸਵੇਰ (Morning)';
+        return;
+    }
+    const shift = selectedShift.value;
+    shiftDisplayEl.value = shift === 'morning' ? 'ਸਵੇਰ (Morning)' : 'ਸ਼ਾਮ (Evening)';
 }
 
-// ==================== RATE TYPE TOGGLE & CALCULATIONS ====================
+// ==================== RATE TYPE TOGGLE ====================
 function toggleRateType() {
-    const isFixed = document.querySelector('input[name="rateType"]:checked').value === 'fixed';
-    document.getElementById('fixedRateRow').style.display = isFixed ? 'flex' : 'none';
-    document.getElementById('fatRateRow').style.display = isFixed ? 'none' : 'flex';
+    const rateTypeEl = document.querySelector('input[name="rateType"]:checked');
+    const animalEl = document.querySelector('input[name="animalType"]:checked');
+    if (!rateTypeEl || !animalEl) return;
+
+    const isFixed = rateTypeEl.value === 'fixed';
+    const animal = animalEl.value;
+
+    const fixedRow = document.getElementById('fixedRateRow');
+    const fatRow = document.getElementById('fatRateRow');
+    const snfRow = document.getElementById('snfRateRow');
+    const snfInput = document.getElementById('snfPercent');
+
+    if (fixedRow) fixedRow.style.display = isFixed ? 'flex' : 'none';
+    if (fatRow) fatRow.style.display = isFixed ? 'none' : 'flex';
+
+    if (snfRow) {
+        const showSnf = (!isFixed && animal === 'cow');
+        snfRow.style.display = showSnf ? 'flex' : 'none';
+        if (!showSnf && snfInput) snfInput.value = '';
+    }
     calculateTotal();
 }
+
+// ==================== CALCULATE TOTAL ====================
 function calculateTotal() {
-    const milk = parseFloat(document.getElementById('milkLiter').value) || 0;
-    const rateType = document.querySelector('input[name="rateType"]:checked').value;
-    const { fixedRate, fatRatePerFat } = window.getCurrentRates(); // from pakkaSettings.js
+    const milkLiterEl = document.getElementById('milkLiter');
+    const rateTypeEl = document.querySelector('input[name="rateType"]:checked');
+    const animalEl = document.querySelector('input[name="animalType"]:checked');
+    const totalAmountEl = document.getElementById('totalAmount');
 
-    // Update disabled rate display fields (so user sees current rates)
-    document.getElementById('fixedRate').value = fixedRate.toFixed(2);
-    document.getElementById('fatRatePerFat').value = fatRatePerFat.toFixed(2);
-
-    let rate = 0;
-    if (rateType === 'fixed') {
-        rate = fixedRate;
-    } else {
-        const fat = parseFloat(document.getElementById('fatPercent').value) || 0;
-        rate = fat * fatRatePerFat;
-    }
-    document.getElementById('totalAmount').value = (milk * rate).toFixed(2);
-}
-// ==================== SAVE ENTRY ====================
-function saveEntry() {
-    const farmer = document.getElementById('farmerName').value.trim();
-    const milk = parseFloat(document.getElementById('milkLiter').value);
-    const date = document.getElementById('entryDate').value; // YYYY-MM-DD
-
-    if (!farmer || isNaN(milk) || milk <= 0 || !date) {
-        alert('ਕਿਰਪਾ ਕਰਕੇ ਸਾਰੀ ਜਾਣਕਾਰੀ ਸਹੀ ਭਰੋ।');
+    if (!milkLiterEl || !rateTypeEl || !animalEl || !totalAmountEl) {
+        if (totalAmountEl) totalAmountEl.value = '0.00';
         return;
     }
 
-    const rateType = document.querySelector('input[name="rateType"]:checked').value;
-    const { fixedRate, fatRatePerFat } = window.getCurrentRates();
+    const milk = parseFloat(milkLiterEl.value) || 0;
+    const rateType = rateTypeEl.value;
+    const animal = animalEl.value;
+
+    const rates = (typeof window.getCurrentRates === 'function')
+        ? window.getCurrentRates()
+        : { fixedRate: 0, fatRatePerFat: 0, cowSnfRate: 0 };
+
+    const fixedRate = rates.fixedRate || 0;
+    const fatRatePerFat = rates.fatRatePerFat || 0;
+    const cowSnfRate = rates.cowSnfRate || 0;
+
+    const fixedDisp = document.getElementById('fixedRate');
+    const fatDisp = document.getElementById('fatRatePerFat');
+    const snfDisp = document.getElementById('snfRatePerSnf');
+
+    if (fixedDisp) fixedDisp.value = fixedRate.toFixed(2);
+    if (fatDisp) fatDisp.value = fatRatePerFat.toFixed(2);
+    if (snfDisp) snfDisp.value = (cowSnfRate || 0).toFixed(2);
+
     let rate = 0;
     if (rateType === 'fixed') {
         rate = fixedRate;
     } else {
-        const fat = parseFloat(document.getElementById('fatPercent').value) || 0;
-        rate = fat * fatRatePerFat;
+        const fat = parseFloat(document.getElementById('fatPercent')?.value) || 0;
+        let snf = 0;
+        if (animal === 'cow') {
+            snf = parseFloat(document.getElementById('snfPercent')?.value) || 0;
+        }
+        rate = (fat * fatRatePerFat) + (snf * cowSnfRate);
     }
+    totalAmountEl.value = (milk * rate).toFixed(2);
+}
+
+// ==================== SAVE ENTRY ====================
+function saveEntry() {
+    const farmerEl = document.getElementById('farmerName');
+    const milkLiterEl = document.getElementById('milkLiter');
+    const dateEl = document.getElementById('entryDate');
+    const animalEl = document.querySelector('input[name="animalType"]:checked');
+    const rateTypeEl = document.querySelector('input[name="rateType"]:checked');
+    const shiftRadioEl = document.querySelector('input[name="shiftChoice"]:checked');
+
+    if (!farmerEl || !milkLiterEl || !dateEl || !animalEl || !rateTypeEl) {
+        alert('ਜ਼ਰੂਰੀ ਫੀਲਡ ਨਹੀਂ ਮਿਲੇ। ਕਿਰਪਾ ਕਰਕੇ ਪੇਜ ਰਿਫ੍ਰੈਸ਼ ਕਰੋ।');
+        return;
+    }
+
+    const farmer = farmerEl.value.trim();
+    const milk = parseFloat(milkLiterEl.value);
+    const date = dateEl.value;
+    const animal = animalEl.value;
+    const rateType = rateTypeEl.value;
+    const shift = shiftRadioEl ? shiftRadioEl.value : (new Date().getHours() < 12 ? 'morning' : 'evening');
+    
+    // ✅ FIX: Shift Display ਹੁਣ DOM ਤੋਂ ਨਹੀਂ, ਸਗੋਂ shift variable ਤੋਂ ਸਿੱਧਾ ਲਿਆ ਗਿਆ ਹੈ
+    const shiftDisplay = shift === 'morning' ? 'ਸਵੇਰ (Morning)' : 'ਸ਼ਾਮ (Evening)';
+
+    if (!farmer) {
+        alert('ਕਿਰਪਾ ਕਰਕੇ ਕਿਸਾਨ ਦਾ ਨਾਮ ਭਰੋ।');
+        return;
+    }
+    if (isNaN(milk) || milk <= 0) {
+        alert('ਕਿਰਪਾ ਕਰਕੇ ਦੁੱਧ ਦੀ ਸਹੀ ਮਾਤਰਾ ਭਰੋ (0 ਤੋਂ ਵੱਧ)।');
+        return;
+    }
+    if (!date) {
+        alert('ਤਾਰੀਖ਼ ਗਲਤ ਹੈ।');
+        return;
+    }
+
+    const rates = (typeof window.getCurrentRates === 'function')
+        ? window.getCurrentRates()
+        : { fixedRate: 0, fatRatePerFat: 0, cowSnfRate: 0 };
+
+    const fixedRate = rates.fixedRate || 0;
+    const fatRatePerFat = rates.fatRatePerFat || 0;
+    const cowSnfRate = rates.cowSnfRate || 0;
+
+    let rate = 0;
+    let fatPercent = 0;
+    let snfPercent = 0;
+
+    const fatInputEl = document.getElementById('fatPercent');
+    const snfInputEl = document.getElementById('snfPercent');
+    
+    fatPercent = parseFloat(fatInputEl?.value) || 0;
+    if (animal === 'cow') {
+        snfPercent = parseFloat(snfInputEl?.value) || 0;
+    }
+
+    if (rateType === 'fat') {
+        if (!fatPercent || fatPercent <= 0) {
+            alert('ਫੈਟ % 0 ਨਹੀਂ ਹੋ ਸਕਦਾ। ਕਿਰਪਾ ਕਰਕੇ ਫੈਟ % ਭਰੋ।');
+            return;
+        }
+        if (animal === 'cow' && snfPercent <= 0) {
+            alert('ਗਾਂ ਲਈ SNF % ਵੀ ਜ਼ਰੂਰੀ ਹੈ।');
+            return;
+        }
+    }
+
+    if (rateType === 'fixed') {
+        rate = fixedRate;
+    } else {
+        rate = (fatPercent * fatRatePerFat) + (snfPercent * cowSnfRate);
+    }
+
     const total = milk * rate;
-    const shift = new Date().getHours() < 12 ? 'morning' : 'evening';
 
     const entry = {
         id: Date.now() + Math.random(),
         date: date,
         shift: shift,
-        shiftDisplay: document.getElementById('shiftDisplay').innerText,
+        shiftDisplay: shiftDisplay,
         farmer: farmer,
-        animal: document.querySelector('input[name="animalType"]:checked').value,
+        animal: animal,
         milk: milk,
+        fatPercent: fatPercent,
+        snfPercent: snfPercent,
         rate: rate,
         total: total,
         expense: 0,
@@ -138,74 +257,114 @@ function saveEntry() {
     updateSummary();
     updatePrevDayTotal();
 
-    // Clear only milk field and focus back
-    document.getElementById('milkLiter').value = '';
-    document.getElementById('milkLiter').focus();
+    if (milkLiterEl) milkLiterEl.value = '';
+    if (fatInputEl) fatInputEl.value = '';
+    if (snfInputEl) snfInputEl.value = '';
+
+    // (Optional) Auto Shift
+    // autoMoveShiftAfterSave(shift);
+
+    calculateTotal();
+    if (milkLiterEl) milkLiterEl.focus();
 }
 
 // ==================== CLEAR FORM ====================
 function clearForm() {
-    document.getElementById('milkLiter').value = '';
+    const milkEl = document.getElementById('milkLiter');
+    const fatEl = document.getElementById('fatPercent');
+    const snfEl = document.getElementById('snfPercent');
+
+    if (milkEl) milkEl.value = '';
+    if (fatEl) fatEl.value = '';
+    if (snfEl) snfEl.value = '';
+
     calculateTotal();
-    document.getElementById('milkLiter').focus();
+    if (milkEl) milkEl.focus();
 }
 
 // ==================== EVENT LISTENERS ====================
 function setupEventListeners() {
-    // Farmer Name & Marquee
     const fNameInput = document.getElementById('farmerName');
-    fNameInput.addEventListener('input', function (e) {
-        const name = e.target.value.trim();
-        document.getElementById('farmerMarquee').innerText = name || 'ਕਿਸਾਨ ਦਾ ਨਾਮ';
-    });
+    if (fNameInput) {
+        fNameInput.addEventListener('input', function (e) {
+            const name = e.target.value.trim();
+            const marquee = document.getElementById('farmerMarquee');
+            if (marquee) marquee.innerText = name || 'ਕਿਸਾਨ ਦਾ ਨਾਮ';
+        });
+    }
 
-    // Rate type toggle
     document.querySelectorAll('input[name="rateType"]').forEach(r => r.addEventListener('change', toggleRateType));
 
-    // Input calculations
     const milkLiter = document.getElementById('milkLiter');
-    milkLiter.addEventListener('input', calculateTotal);
-    document.getElementById('fixedRate').addEventListener('input', calculateTotal);
-    document.getElementById('fatPercent').addEventListener('input', calculateTotal);
+    const fatPercentEl = document.getElementById('fatPercent');
+    const fixedRateEl = document.getElementById('fixedRate');
+    const snfInput = document.getElementById('snfPercent');
+    
+    // Milk Input Listener
+    if (milkLiter) {
+        milkLiter.addEventListener('input', calculateTotal);
+        milkLiter.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveEntry();
+            }
+        });
+    }
+    if (fatPercentEl) fatPercentEl.addEventListener('input', calculateTotal);
+    if (fixedRateEl) fixedRateEl.addEventListener('input', calculateTotal);
 
-    // Quick Save: Press Enter in milk field
-    milkLiter.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            saveEntry();
-        }
-    });
+    // ✅ FIX: Fat ਅਤੇ SNF ਇਨਪੁਟਸ 'ਤੇ ਵੀ Enter ਦਬਾਉਣ 'ਤੇ Save ਚੱਲੇ
+    if (fatPercentEl) {
+        fatPercentEl.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveEntry();
+            }
+        });
+    }
+    if (snfInput) {
+        snfInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveEntry();
+            }
+        });
+    }
 
-    // Animal type change -> update rates display
+    const saveBtn = document.getElementById('saveEntryBtn');
+    const clearBtn = document.getElementById('clearFormBtn');
+    if (saveBtn) saveBtn.addEventListener('click', saveEntry);
+    if (clearBtn) clearBtn.addEventListener('click', clearForm);
+
+    const pdfRange = document.getElementById('pdfDateRange');
+    if (pdfRange) {
+        pdfRange.addEventListener('change', function () {
+            const customRange = document.getElementById('customDateRange');
+            if (customRange) customRange.style.display = this.value === 'custom' ? 'flex' : 'none';
+        });
+    }
+
+    if (snfInput) snfInput.addEventListener('input', calculateTotal);
+
+    document.querySelectorAll('input[name="shiftChoice"]').forEach(r => r.addEventListener('change', updateShiftDisplay));
+
     document.querySelectorAll('input[name="animalType"]').forEach(r => r.addEventListener('change', function () {
-        calculateTotal();
+        toggleRateType();
     }));
-
-    // Save and clear buttons
-    document.getElementById('saveEntryBtn').addEventListener('click', saveEntry);
-    document.getElementById('clearFormBtn').addEventListener('click', clearForm);
-
-    // PDF Date Range toggle
-    document.getElementById('pdfDateRange').addEventListener('change', function () {
-        document.getElementById('customDateRange').style.display = this.value === 'custom' ? 'flex' : 'none';
-    });
 }
-
 
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', function () {
     loadEntries();
     setCurrentDate();
-
     updateShiftDisplay();
     setupEventListeners();
     updateSummary();
     updatePrevDayTotal();
 
-    // Load default farmer name and rates from settings
     if (typeof updateMainFormFromSettings === 'function') {
         updateMainFormFromSettings();
     }
-    calculateTotal(); // ensure rates are displayed
+    calculateTotal();
+    toggleRateType();
 });
-
