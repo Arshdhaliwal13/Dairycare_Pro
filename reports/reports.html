@@ -51,6 +51,25 @@
                         <label><input type="checkbox" id="filterCow" checked> ਗਾਂ</label>
                     </div>
                 </div>
+                <!-- New: Shift Filter -->
+                <div class="filter-group">
+                    <label>🌞/🌙 ਸ਼ਿਫਟ</label>
+                    <div class="radio-group" style="justify-content: flex-start;">
+                        <label><input type="radio" name="filterShift" value="all" checked> ਦੋਵੇਂ</label>
+                        <label><input type="radio" name="filterShift" value="morning"> ਸਵੇਰ</label>
+                        <label><input type="radio" name="filterShift" value="evening"> ਸ਼ਾਮ</label>
+                    </div>
+                </div>
+                <!-- New: Quick Date Shortcuts -->
+                <div class="filter-group" style="grid-column: 1 / -1;">
+                    <label>⏱️ ਤੁਰੰਤ ਰੇਂਜ</label>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-sm btn-secondary" onclick="setDateRange('today')">ਅੱਜ</button>
+                        <button class="btn btn-sm btn-secondary" onclick="setDateRange('week')">ਇਸ ਹਫ਼ਤੇ</button>
+                        <button class="btn btn-sm btn-secondary" onclick="setDateRange('month')">ਇਸ ਮਹੀਨੇ</button>
+                        <button class="btn btn-sm btn-secondary" onclick="setDateRange('last30')">ਪਿਛਲੇ 30 ਦਿਨ</button>
+                    </div>
+                </div>
                 <div class="filter-group">
                     <div class="filter-actions">
                         <button id="applyFiltersBtn" class="btn btn-primary">ਫਿਲਟਰ ਲਾਗੂ</button>
@@ -59,6 +78,7 @@
                 </div>
             </div>
         </div>
+
         <div class="charts-section">
             <div class="card chart-card">
                 <h2>📈 ਰੋਜ਼ਾਨਾ ਦੁੱਧ (ਲੀਟਰ)</h2>
@@ -84,6 +104,7 @@
                     <thead>
                         <tr>
                             <th>ਤਾਰੀਖ਼</th>
+                            <th>ਸ਼ਿਫਟ</th>
                             <th>ਕਿਸਮ</th>
                             <th>ਦੁੱਧ (L)</th>
                             <th>ਰੇਟ (₹)</th>
@@ -92,7 +113,7 @@
                     </thead>
                     <tbody id="entriesBody">
                         <tr>
-                            <td colspan="5" class="text-center">ਕੋਈ ਐਂਟਰੀ ਨਹੀਂ</td>
+                            <td colspan="6" class="text-center">ਕੋਈ ਐਂਟਰੀ ਨਹੀਂ</td>
                         </tr>
                     </tbody>
                 </table>
@@ -113,7 +134,6 @@
                     <h3>📅 ਮਹੀਨੇਵਾਰ ਰਿਪੋਰਟ</h3>
                     <select id="monthSelector" class="form-control">
                     </select>
-                    </select>
                     <div class="report-content" id="monthlyReportContent">
                         <p><strong>ਦੁੱਧ:</strong> <span id="monthlyMilk">0 L</span></p>
                         <p><strong>ਕਮਾਈ:</strong> <span id="monthlyIncome">₹0</span></p>
@@ -122,7 +142,6 @@
                 <div class="report-box" id="yearlyReport">
                     <h3>📆 ਸਾਲਾਨਾ ਰਿਪੋਰਟ</h3>
                     <select id="yearSelector" class="form-control">
-                        <option value="2026">2026</option>
                     </select>
                     <div class="report-content">
                         <p><strong>ਦੁੱਧ:</strong> <span id="yearlyMilk">0 L</span></p>
@@ -151,6 +170,11 @@
                     <span class="analytics-label">ਸਭ ਤੋਂ ਘੱਟ ਦੁੱਧ ਵਾਲਾ ਦਿਨ</span>
                     <span class="analytics-value" id="minMilkDay">-</span>
                 </div>
+                <!-- New: Average Rate per Liter -->
+                <div class="analytics-item">
+                    <span class="analytics-label">ਔਸਤ ਰੇਟ (₹/L)</span>
+                    <span class="analytics-value" id="avgRatePerLiter">₹0.00</span>
+                </div>
             </div>
         </div>
 
@@ -159,6 +183,8 @@
                 <input type="checkbox" id="includeEntriesList" checked> 📋 ਐਂਟਰੀਆਂ ਦੀ ਸੂਚੀ PDF ਵਿੱਚ ਦਿਖਾਓ
             </label>
             <button id="generateReportsPdfBtn" class="btn btn-primary">📊 ਗ੍ਰਾਫ਼ PDF ਡਾਊਨਲੋਡ ਕਰੋ</button>
+            <!-- New: Excel Export Button -->
+            <button id="exportExcelBtn" class="btn btn-secondary" style="margin-left: 10px;">📑 Excel ਐਕਸਪੋਰਟ</button>
         </div>
     </main>
 
