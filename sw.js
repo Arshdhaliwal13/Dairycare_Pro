@@ -1,14 +1,21 @@
 const CACHE_NAME = 'dairycare-v7.6';
-const BASE_PATH = '/Dairycare_Pro/';
+const isGH = self.location.hostname.includes('github.io');
+const BASE_PATH = isGH ? '/Dairycare_Pro/' : '/';
 
 const urlsToCache = [
-  BASE_PATH,              // 👈 root – offline 'ch index.html without typing full name
+  BASE_PATH,
   `${BASE_PATH}index.html`,
+  `${BASE_PATH}donate.html`,
+  `${BASE_PATH}pakka_hisab/pakka.html`,
+  `${BASE_PATH}kacha_hisab/kacha.html`,
+  `${BASE_PATH}reports/reports.html`,
+  `${BASE_PATH}dues/dues.html`,
   `${BASE_PATH}assets/style.css`,
   `${BASE_PATH}assets/script.js`,
   `${BASE_PATH}assets/dashboard.js`,
   `${BASE_PATH}components/header.html`,
-  `${BASE_PATH}components/footer.html`
+  `${BASE_PATH}components/footer.html`,
+  `${BASE_PATH}components/marquee.html`
 ];
 
 // Install Event – cache essential files
@@ -48,10 +55,10 @@ self.addEventListener('fetch', event => {
         // Offline – ignore silently
       });
 
-      // Return cached version immediately, or wait for network if no cache
+      // ਕੈਸ਼ੇ ਵਿੱਚੋਂ ਫਾਈਲ ਦਿਓ, ਜੇਕਰ ਕੈਸ਼ੇ 'ਚ ਨਹੀਂ ਹੈ ਤਾਂ ਨੈੱਟਵਰਕ ਰਿਸਪੌਂਸ ਦਿਓ
       return cachedResponse || fetchPromise;
     }).catch(() => {
-      // Ultimate fallback – always show index.html
+      // ਜੇਕਰ ਔਫਲਾਈਨ ਹੋਵੇ ਅਤੇ ਫਾਈਲ ਨਾ ਮਿਲੇ ਤਾਂ index.html ਫਾਲਬੈਕ ਦਿਓ
       return caches.match(`${BASE_PATH}index.html`);
     })
   );
