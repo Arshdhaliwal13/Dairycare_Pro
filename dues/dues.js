@@ -1,16 +1,25 @@
 // dues.js – Simplified Expense Tracker (only expenses, no advances)
 let expenses = [];
 
-function todayStr() { return new Date().toISOString().split('T')[0]; }
+// Helper: Get today's date in YYYY-MM-DD format
+function todayStr() {
+    return new Date().toISOString().split('T')[0];
+}
 
+// Load from localStorage
 function loadExpenses() {
     const stored = localStorage.getItem('dairycare_expenses');
     if (stored) {
         try { expenses = JSON.parse(stored); } catch (e) { expenses = []; }
     } else { expenses = []; }
 }
-function saveExpenses() { localStorage.setItem('dairycare_expenses', JSON.stringify(expenses)); }
 
+// Save to localStorage
+function saveExpenses() {
+    localStorage.setItem('dairycare_expenses', JSON.stringify(expenses));
+}
+
+// Render filtered expenses
 function renderExpenses() {
     const start = document.getElementById('filterStart').value;
     const end = document.getElementById('filterEnd').value;
@@ -23,6 +32,7 @@ function renderExpenses() {
     const tbody = document.getElementById('expenseBody');
     if (!filtered.length) {
         tbody.innerHTML = '<tr><td colspan="5" class="text-center">ਕੋਈ ਖਰਚਾ ਨਹੀਂ</td></tr>';
+        document.getElementById('totalExpense').innerText = '₹0.00';
         return;
     }
     let html = '';
@@ -44,17 +54,34 @@ function renderExpenses() {
     document.getElementById('totalExpense').innerText = '₹' + total.toFixed(2);
 }
 
+// Add or Update expense (with proper validation and ID handling)
 function addExpense() {
     const date = document.getElementById('expenseDate').value;
-    if (!date) { alert('ਤਾਰੀਖ਼ ਚੁਣੋ'); return; }
-    const amount = parseFloat(document.getElementById('expenseAmount').value);
-    if (isNaN(amount) || amount <= 0) { alert('ਰਕਮ ਸਹੀ ਭਰੋ (0 ਤੋਂ ਵੱਧ)'); return; }
-    const item = document.getElementById('expenseItem').value.trim() || '-';
+    const amountInput = document.getElementById('expenseAmount').value;
+    const itemInput = document.getElementById('expenseItem').value.trim();
     const note = document.getElementById('expenseNote').value.trim();
-    const entry = { id: editMode ? editId : Date.now() + Math.random(), date, amount, item, note };
+
+    // Mandatory Validation
+    if (!date) {
+        alert('ਤਾਰੀਖ਼ ਚੁਣੋ');
+        return;
+    }
+    if (amountInput === '' || isNaN(amountInput) || parseFloat(amountInput) <= 0) {
+        alert('ਰਕਮ ਸਹੀ ਭਰੋ (0 ਤੋਂ ਵੱਧ)');
+        return;
+    }
+    if (!itemInput) {
+        alert('ਸਮਾਨ / ਕੰਮ ਦਾ ਨਾਮ ਭਰੋ');
+        return;
+    }
+
+    const amount = parseFloat(amountInput);
+    // ✅ ID ਬਣਾਉਣ ਸਮੇਂ String ਵੀ ਵਰਤ ਸਕਦੇ ਹੋ, ਪਰ ਹੁਣ ਅਸੀਂ ਹੇਠਾਂ ਤੁਲਨਾ String ਨਾਲ ਕਰਾਂਗੇ
+    const entry = { id: editMode ? editId : Date.now() + Math.random(), date, amount, item: itemInput, note };
 
     if (editMode) {
-        expenses = expenses.map(x => x.id == editId ? entry : x);
+        // ✅ ID ਨੂੰ String ਵਿੱਚ ਬਦਲ ਕੇ ਤੁਲਨਾ ਕਰੋ (strict equality ਲਈ ਸੁਰੱਖਿਅਤ)
+        expenses = expenses.map(x => String(x.id) === String(editId) ? entry : x);
         editMode = false;
         editId = null;
         document.getElementById('saveExpenseBtn').innerText = '➕ ਖਰਚਾ ਸੇਵ ਕਰੋ';
@@ -65,7 +92,7 @@ function addExpense() {
     saveExpenses();
     renderExpenses();
 
-    // Clear Form Fields
+    // Clear amount, item, note only (date stays as is)
     document.getElementById('expenseAmount').value = '';
     document.getElementById('expenseItem').value = '';
     document.getElementById('expenseNote').value = '';
@@ -75,12 +102,13 @@ let editMode = false;
 let editId = null;
 
 function editExpense(e) {
-    const id = e.currentTarget.getAttribute('data-id');
-    const exp = expenses.find(x => x.id == id);
+    const id = e.currentTarget.getAttribute('data-id'); // String
+    // ✅ String ਵਿੱਚ ਤੁਲਨਾ ਕਰੋ
+    const exp = expenses.find(x => String(x.id) === String(id));
     if (!exp) return;
 
     editMode = true;
-    editId = id;
+    editId = exp.id; // Save the original (number/string) as is
 
     document.getElementById('expenseDate').value = exp.date;
     document.getElementById('expenseAmount').value = exp.amount;
@@ -92,8 +120,9 @@ function editExpense(e) {
 
 function deleteExpense(e) {
     if (!confirm('ਕੀ ਇਹ ਖਰਚਾ ਮਿਟਾਉਣਾ ਹੈ?')) return;
-    const id = e.currentTarget.getAttribute('data-id');
-    expenses = expenses.filter(x => x.id != id);
+    const id = e.currentTarget.getAttribute('data-id'); // String
+    // ✅ String ਵਿੱਚ ਫਿਲਟਰ ਕਰੋ
+    expenses = expenses.filter(x => String(x.id) !== String(id));
     saveExpenses();
     renderExpenses();
 }
@@ -113,6 +142,16 @@ function resetFilters() {
     renderExpenses();
 }
 
+// Helper to reset the form completely (used by clear button)
+function resetForm() {
+    document.getElementById('expenseAmount').value = '';
+    document.getElementById('expenseItem').value = '';
+    document.getElementById('expenseNote').value = '';
+    editMode = false;
+    editId = null;
+    document.getElementById('saveExpenseBtn').innerText = '➕ ਖਰਚਾ ਸੇਵ ਕਰੋ';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('expenseDate').value = todayStr();
     loadExpenses();
@@ -120,15 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('applyFilterBtn').addEventListener('click', applyFilters);
     document.getElementById('resetFilterBtn').addEventListener('click', resetFilters);
     document.getElementById('saveExpenseBtn').addEventListener('click', addExpense);
-    document.getElementById('clearExpenseFormBtn').addEventListener('click', () => {
-        document.getElementById('expenseAmount').value = '';
-        document.getElementById('expenseItem').value = '';
-        document.getElementById('expenseNote').value = '';
-        if (editMode) {
-            editMode = false;
-            editId = null;
-            document.getElementById('saveExpenseBtn').innerText = '➕ ਖਰਚਾ ਸੇਵ ਕਰੋ';
-        }
-    });
+    document.getElementById('clearExpenseFormBtn').addEventListener('click', resetForm);
     document.getElementById('deleteAllBtn').addEventListener('click', deleteAll);
 });
