@@ -1,6 +1,6 @@
 <header class="site-header">
     <div class="container header-flex">
-        <!-- Logo -->
+        <!-- 1. Left: Logo -->
         <div class="logo">
             <a href="#"
                 onclick="window.location.href = window.location.hostname.includes('github.io') ? '/Dairycare_Pro/' : '/'; return false;">
@@ -8,16 +8,20 @@
             </a>
         </div>
 
-        <!-- 🏠 Fancy Home Button -->
-        <a href="#"
-            onclick="window.location.href = window.location.hostname.includes('github.io') ? '/Dairycare_Pro/' : '/'; return false;"
-            class="btn-home">
-            <span class="home-icon">🏠</span> <span>ਹੋਮ</span>
-        </a>
+        <!-- 2. Center: Home Button -->
+        <div class="header-center">
+            <a href="#"
+                onclick="window.location.href = window.location.hostname.includes('github.io') ? '/Dairycare_Pro/' : '/'; return false;"
+                class="btn-home">
+                <span class="home-icon">🏠</span> <span>ਹੋਮ</span>
+            </a>
+        </div>
 
-        <!-- Version Badge -->
-        <div class="version-badge">
-            <span id="appVersion" class="version-text">v?</span>
+        <!-- 3. Right: Version Badge -->
+        <div class="header-right">
+            <div class="version-badge">
+                <span id="appVersion" class="version-text">v7.7</span>
+            </div>
         </div>
     </div>
 </header>
