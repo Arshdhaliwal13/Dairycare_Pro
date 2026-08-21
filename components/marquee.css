@@ -9,6 +9,8 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border-top: 2px solid #facc15;
     border-bottom: 2px solid #facc15;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Gradient fade on edges (modern ticker effect) */
@@ -40,7 +42,9 @@
     will-change: transform;
 }
 
-.ticker:hover {
+/* ✅ Hover ਅਤੇ Mobile Touch (Active) ਦੋਵਾਂ 'ਤੇ Pause ਹੋਵੇਗਾ */
+.ticker:hover,
+.ticker:active {
     animation-play-state: paused;
 }
 
