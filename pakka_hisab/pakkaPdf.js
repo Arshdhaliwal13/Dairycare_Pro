@@ -1,38 +1,76 @@
-// pakkaPdf.js - Final A4 Portrait with correct margins, watermark, and pagination
+// pakkaPdf.js - Final A4 Portrait with SNF column, dynamic column, and all features from Kacha
 // Developed by Arshdeep Singh
 
 function generatePDF() {
-    const settings = loadSettings();
+    // 🛡️ Safe loadSettings
+    const settings = typeof loadSettings === 'function' ? loadSettings() : {};
+
+    // Sanitize filename
+    function sanitizeFileName(name) {
+        try {
+            return name.replace(/[^\p{L}\p{M}\p{N}_\-. ]/gu, '_');
+        } catch (e) {
+            return name.replace(/[^a-zA-Z0-9\u0A00-\u0A7F_\-. ]/g, '_');
+        }
+    }
+
+    // ✅ Guard: Check entries array
+    if (typeof entries === 'undefined' || !Array.isArray(entries)) {
+        alert('ਡਾਟਾ ਲੋਡ ਨਹੀਂ ਹੋਇਆ। ਕਿਰਪਾ ਕਰਕੇ ਪੇਜ ਰਿਫ੍ਰੈਸ਼ ਕਰੋ।');
+        return;
+    }
+
+    // ✅ Guard: Check DOM elements
+    const pdfDateRangeEl = document.getElementById('pdfDateRange');
+    const pdfStartDateEl = document.getElementById('pdfStartDate');
+    const pdfEndDateEl = document.getElementById('pdfEndDate');
+    const includeBuffaloEl = document.getElementById('includeBuffalo');
+    const includeCowEl = document.getElementById('includeCow');
+
+    if (!pdfDateRangeEl || !includeBuffaloEl || !includeCowEl) {
+        alert('PDF ਫਾਰਮ ਦੇ ਕੁਝ ਐਲੀਮੈਂਟਸ ਨਹੀਂ ਮਿਲੇ। ਪੇਜ ਰਿਫ੍ਰੈਸ਼ ਕਰੋ।');
+        return;
+    }
 
     const farmerName = prompt('ਕਿਸਾਨ ਦਾ ਨਾਮ ਦਰਜ ਕਰੋ:', settings.defaultFarmerName || '_____________');
     if (farmerName === null) return;
     const farmerPhone = prompt('ਕਿਸਾਨ ਦਾ ਫ਼ੋਨ ਨੰਬਰ:', settings.defaultFarmerPhone || '_____________');
     if (farmerPhone === null) return;
 
-    // Portrait A4 (default orientation is portrait)
+    // ✅ Check if jsPDF is loaded
+    if (typeof window.jspdf === 'undefined') {
+        alert('PDF ਲਾਈਬ੍ਰੇਰੀ ਲੋਡ ਨਹੀਂ ਹੋਈ। ਕਿਰਪਾ ਕਰਕੇ ਪੇਜ ਰਿਫ੍ਰੈਸ਼ ਕਰੋ।');
+        return;
+    }
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
-    // Get date range from PDF options
-    const range = document.getElementById('pdfDateRange').value;
+    // Date range
+    const range = pdfDateRangeEl.value;
     let startDate, endDate;
-    if (range === 'custom') {
-        startDate = document.getElementById('pdfStartDate').value;
-        endDate = document.getElementById('pdfEndDate').value;
+
+    if (range === 'all') {
+        startDate = '1900-01-01';
+        endDate = '2999-12-31';
+    } else if (range === 'custom') {
+        startDate = pdfStartDateEl ? pdfStartDateEl.value : '';
+        endDate = pdfEndDateEl ? pdfEndDateEl.value : '';
         if (!startDate || !endDate) {
             alert('ਕਿਰਪਾ ਕਰਕੇ ਸ਼ੁਰੂ ਅਤੇ ਅੰਤ ਦੀ ਤਾਰੀਖ਼ ਚੁਣੋ।');
             return;
         }
     } else {
+        // Numeric range (e.g., 1, 10, 15, 30)
         endDate = new Date().toISOString().split('T')[0];
-        const days = parseInt(range);
+        // 🛡️ Safe parseInt with fallback
+        const days = parseInt(range) || 1;
         const start = new Date();
         start.setDate(start.getDate() - days + 1);
         startDate = start.toISOString().split('T')[0];
     }
 
-    const includeBuffalo = document.getElementById('includeBuffalo').checked;
-    const includeCow = document.getElementById('includeCow').checked;
+    const includeBuffalo = includeBuffaloEl.checked;
+    const includeCow = includeCowEl.checked;
 
     let filtered = entries.filter(e => {
         return e.date >= startDate && e.date <= endDate &&
@@ -46,17 +84,29 @@ function generatePDF() {
 
     filtered.sort((a, b) => a.date.localeCompare(b.date));
 
-    // Totals
-    const totalMilk = filtered.reduce((acc, e) => acc + e.milk, 0).toFixed(2);
-    const totalIncome = filtered.reduce((acc, e) => acc + e.total, 0).toFixed(2);
-    const totalNet = filtered.reduce((acc, e) => acc + (e.net || e.total || 0), 0).toFixed(2);
+    // ✅ Totals with safe number parsing (using Number() to avoid string concatenation)
+    const totalMilk = filtered.reduce((acc, e) => acc + (Number(e.milk) || 0), 0).toFixed(2);
+    const totalIncome = filtered.reduce((acc, e) => acc + (Number(e.total) || 0), 0).toFixed(2);
+    const totalNet = filtered.reduce((acc, e) => acc + (Number(e.net) || Number(e.total) || 0), 0).toFixed(2);
 
-    const displayFarmer = farmerName;
+    // Date range text - safely format dates
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+        // Fallback for unexpected format
+        return dateStr;
+    }
     let dateRangeText = startDate === endDate
-        ? startDate.split('-').reverse().join('/')
-        : `${startDate.split('-').reverse().join('/')} ਤੋਂ ${endDate.split('-').reverse().join('/')}`;
+        ? formatDate(startDate)
+        : `${formatDate(startDate)} ਤੋਂ ${formatDate(endDate)}`;
 
-    // Create visible container at the bottom of the page (for debugging)
+    // Check if any entry has SNF data
+    const hasSnfData = filtered.some(e => e.snfPercent && e.snfPercent > 0);
+
+    // Create container for html2canvas
     const reportContainer = document.createElement('div');
     reportContainer.style.position = 'absolute';
     reportContainer.style.top = '0';
@@ -68,17 +118,15 @@ function generatePDF() {
     reportContainer.style.fontSize = '12px';
     reportContainer.style.lineHeight = '1.4';
     reportContainer.style.zIndex = '9999';
-    reportContainer.style.boxShadow = '0 0 0 1px red'; // visible border for debugging (remove later)
     document.body.appendChild(reportContainer);
 
-    // Load Punjabi font (Google Fonts)
+    // Load Punjabi font
     if (!document.querySelector('link[href*="Noto+Sans+Gurmukhi"]')) {
         const link = document.createElement('link');
         link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+Gurmukhi:wght@400;500;700&display=swap';
         link.rel = 'stylesheet';
         document.head.appendChild(link);
     }
-    // Force font on all elements in the container
     const style = document.createElement('style');
     style.textContent = `
         #pdf-report-container, #pdf-report-container * {
@@ -88,14 +136,14 @@ function generatePDF() {
     reportContainer.id = 'pdf-report-container';
     document.head.appendChild(style);
 
-    const displayDairyName = settings.dairyName || '';
+    const displayDairyName = settings.dairyName || 'DairyCare Pro';
     let html = `
         <div style="text-align: center; margin-bottom: 10px;">
             <h1 style="color: #2a9d8f; margin: 0;">${displayDairyName}</h1>
             <p style="font-size: 12px; margin: 2px 0;"><strong>ਮਾਲਕ:</strong> ${settings.dairyOwner || ''} | <strong>ਪਤਾ:</strong> ${settings.dairyAddress || ''} | 📞 ${settings.dairyPhone || ''}</p>
             <hr style="border: 1px solid #2a9d8f; width: 80%;">
             <h2 style="color: #2c3e50; margin: 5px 0;">ਰਿਪੋਰਟ</h2>
-            <p style="font-size: 12px; margin: 2px 0;"><strong>ਕਿਸਾਨ:</strong> ${displayFarmer} | <strong>ਕਿਸਾਨ ਦਾ ਫ਼ੋਨ:</strong> ${farmerPhone}</p>
+            <p style="font-size: 12px; margin: 2px 0;"><strong>ਕਿਸਾਨ:</strong> ${farmerName} | <strong>ਕਿਸਾਨ ਦਾ ਫ਼ੋਨ:</strong> ${farmerPhone}</p>
             <p style="font-size: 12px; margin: 2px 0;"><strong>ਮਿਤੀ ਰੇਂਜ:</strong> ${dateRangeText}</p>
         </div>
         <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px;">
@@ -106,6 +154,7 @@ function generatePDF() {
                     <th style="padding: 6px; border: 1px solid #ddd;">ਕਿਸਮ</th>
                     <th style="padding: 6px; border: 1px solid #ddd;">ਦੁੱਧ (L)</th>
                     <th style="padding: 6px; border: 1px solid #ddd;">ਰੇਟ (₹)</th>
+                    ${hasSnfData ? `<th style="padding: 6px; border: 1px solid #ddd;">SNF %</th>` : ''}
                     <th style="padding: 6px; border: 1px solid #ddd;">ਕੁੱਲ (₹)</th>
                 </tr>
             </thead>
@@ -113,18 +162,24 @@ function generatePDF() {
     `;
 
     filtered.forEach(entry => {
-        const [y, m, d] = entry.date.split('-');
-        const displayDate = `${d}/${m}/${y}`;
+        // ✅ Safe date formatting using formatDate
+        const displayDate = formatDate(entry.date);
         const shift = entry.shiftDisplay || (entry.shift === 'morning' ? 'ਸਵੇਰ' : 'ਸ਼ਾਮ');
         const animal = entry.animal === 'buffalo' ? 'ਮੱਝ' : 'ਗਾਂ';
+        const snfDisplay = (entry.snfPercent && entry.snfPercent > 0) ? entry.snfPercent.toFixed(1) : '-';
+        // ✅ Safe number parsing for toFixed()
+        const milkVal = Number(entry.milk) || 0;
+        const rateVal = Number(entry.rate) || 0;
+        const totalVal = Number(entry.total) || 0;
         html += `
             <tr>
                 <td style="padding: 4px; border: 1px solid #ddd;">${displayDate}</td>
                 <td style="padding: 4px; border: 1px solid #ddd;">${shift}</td>
                 <td style="padding: 4px; border: 1px solid #ddd;">${animal}</td>
-                <td style="padding: 4px; border: 1px solid #ddd; text-align: right;">${entry.milk.toFixed(2)}</td>
-                <td style="padding: 4px; border: 1px solid #ddd; text-align: right;">${entry.rate.toFixed(2)}</td>
-                <td style="padding: 4px; border: 1px solid #ddd; text-align: right;">${entry.total.toFixed(2)}</td>
+                <td style="padding: 4px; border: 1px solid #ddd; text-align: right;">${milkVal.toFixed(2)}</td>
+                <td style="padding: 4px; border: 1px solid #ddd; text-align: right;">${rateVal.toFixed(2)}</td>
+                ${hasSnfData ? `<td style="padding: 4px; border: 1px solid #ddd; text-align: center;">${snfDisplay}</td>` : ''}
+                <td style="padding: 4px; border: 1px solid #ddd; text-align: right;">${totalVal.toFixed(2)}</td>
             </tr>
         `;
     });
@@ -152,9 +207,25 @@ function generatePDF() {
         <div style="text-align: center; margin-top: 10px; font-size: 9px; color: #666;">
             ⚡ ਇਹ ਰਿਪੋਰਟ ਕੰਪਿਊਟਰ ਦੁਆਰਾ ਤਿਆਰ ਕੀਤੀ ਗਈ ਹੈ, ਬਿਨਾਂ ਦਸਤਖਤ ਅਤੇ ਮੋਹਰ ਦੇ ਵੈਧ ਨਹੀਂ।
         </div>
+        <div style="text-align: center; margin-top: 8px; padding: 8px; background: linear-gradient(135deg, #2a9d8f, #264653); color: white; border-radius: 4px;">
+            <span style="font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;">
+                ✨ Free Digital Dairy Management Software ✨
+            </span>
+            <div style="font-size: 12px; font-weight: bold; margin-top: 2px; color: #ffe66d;">
+                DairyCare Pro (Designed by : Arshdeep Singh)
+            </div>
+        </div>
     `;
 
     reportContainer.innerHTML = html;
+
+    // ✅ Check if html2canvas is available
+    if (typeof html2canvas === 'undefined') {
+        alert('html2canvas ਲਾਇਬ੍ਰੇਰੀ ਲੋਡ ਨਹੀਂ ਹੋਈ। PDF ਬਣਾਉਣ ਲਈ ਪੇਜ ਰਿਫ੍ਰੈਸ਼ ਕਰੋ।');
+        // 🛡️ Safe removal: only if parentNode exists
+        if (reportContainer.parentNode) document.body.removeChild(reportContainer);
+        return;
+    }
 
     // Wait for fonts and layout
     setTimeout(() => {
@@ -166,47 +237,57 @@ function generatePDF() {
         })
             .then(canvas => {
                 const imgData = canvas.toDataURL('image/jpeg', 0.9);
-                const pageWidth = doc.internal.pageSize.getWidth();  // 210mm for A4 portrait
-                const pageHeight = doc.internal.pageSize.getHeight(); // 297mm
-                const leftMargin = 10;   // mm
-                const rightMargin = 10;   // mm
-                const topMargin = 3;     // mm
-                const bottomMargin = 15;   // mm
-
-                const contentWidth = pageWidth - leftMargin - rightMargin; // 190mm
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const leftMargin = 10;
+                const rightMargin = 10;
+                const topMargin = 3; // mm
+                const contentWidth = pageWidth - leftMargin - rightMargin;
                 const contentHeight = (canvas.height * contentWidth) / canvas.width;
 
-                // Pagination: draw the image with negative offsets, respecting top margin
-                let heightLeft = contentHeight;
-                let position = -topMargin;  // start at -topMargin so the first page starts after top margin
+                // ✅ Fix: Use source rectangle per page with safe clipping
+                const usableHeightPerPage = pageHeight - topMargin;
+                let sy_mm = 0;
                 let pageNum = 1;
+                const scale = canvas.width / contentWidth; // pixels per mm
 
-                while (heightLeft > 0) {
+                while (sy_mm < contentHeight) {
                     if (pageNum > 1) {
                         doc.addPage();
-                        position = -topMargin - (pageNum - 1) * pageHeight;
                     }
-                    doc.addImage(imgData, 'JPEG', leftMargin, position, contentWidth, contentHeight, undefined, 'FAST');
-                    heightLeft -= pageHeight;
+                    let sliceHeightMm = Math.min(usableHeightPerPage, contentHeight - sy_mm);
+                    // Source rectangle in pixels
+                    const sx = 0;
+                    const sy = sy_mm * scale;
+                    const sw = canvas.width;
+                    // ✅ Ensure sh does not exceed canvas height
+                    const sh = Math.min(sliceHeightMm * scale, canvas.height - sy);
+
+                    doc.addImage(imgData, 'JPEG', leftMargin, topMargin, contentWidth, sliceHeightMm, undefined, 'FAST', sx, sy, sw, sh);
+
+                    sy_mm += sliceHeightMm;
                     pageNum++;
                 }
 
-                // Unique filename
-                const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-                const fileName = `${farmerName.replace(/\s+/g, '_')}_${timestamp}_pakka_hisab_report.pdf`;
+                const timestamp = new Date().toISOString().slice(0, 10);
+                const safeName = sanitizeFileName(farmerName);
+                const fileName = `${safeName.replace(/\s+/g, '_')}_${timestamp}_pakka_hisab_report.pdf`;
                 doc.save(fileName);
-                document.body.removeChild(reportContainer);
             })
             .catch(error => {
                 console.error('PDF generation error:', error);
-                alert('PDF ਬਣਾਉਣ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ: ' + error.message);
-                document.body.removeChild(reportContainer);
+                alert('PDF ਬਣਾਉਣ ਵਿੱਚ ਸਮੱਸਿਆ: ' + error.message);
+            })
+            .finally(() => {
+                if (reportContainer.parentNode) {
+                    document.body.removeChild(reportContainer);
+                }
             });
     }, 800);
 }
 
-// Add listener for PDF button
+// Add listener for PDF button (ID must be 'downloadPdfBtn' in HTML)
 document.addEventListener('DOMContentLoaded', function () {
-    const btn = document.getElementById('generatePdfBtn');
+    const btn = document.getElementById('downloadPdfBtn');
     if (btn) btn.addEventListener('click', generatePDF);
 });
