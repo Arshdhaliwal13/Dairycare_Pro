@@ -23,7 +23,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
             <h1 class="page-title">📋 ਪੱਕਾ ਹਿਸਾਬ (Daily Record)</h1>
             <button id="settingsBtn" class="btn btn-sm"
-                style="background: transparent; border: none; font-size: 2rem;">⚙️</button>
+                style="background: transparent; border: none; font-size: 2rem; line-height: 1; padding: 0.5rem;">⚙️</button>
         </div>
         <p class="subtitle">ਰੋਜ਼ਾਨਾ ਦੁੱਧ ਦਾ ਰਿਕਾਰਡ ਰੱਖੋ</p>
 
@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <label for="farmerName">👤 ਕਿਸਾਨ ਦਾ ਨਾਮ (English, mandatory):</label>
                     <input type="text" id="farmerName" class="form-control" placeholder="ਜਿਵੇਂ: Arshdeep Singh"
-                        autocomplete="off" required readonly>
+                        autocomplete="off" required>
                     <!-- ❌ datalist removed (not used) -->
                 </div>
             </div>
@@ -95,6 +95,18 @@
                         placeholder="ਜਿਵੇਂ: 8.50" disabled>
                 </div>
             </div>
+            <!-- SNF Rate Row (hidden by default, shown when fat rate is selected) -->
+            <div class="form-row" id="snfRateRow" style="display: none;">
+                <div class="form-group">
+                    <label for="snfPercent">🥛 SNF %</label>
+                    <input type="number" id="snfPercent" class="form-control" step="0.1" min="0" max="12"
+                        placeholder="ਜਿਵੇਂ: 8.5">
+                </div>
+                <div class="form-group">
+                    <label for="snfRatePerSnf">💰 ਪ੍ਰਤੀ SNF ਰੇਟ (₹)</label>
+                    <input type="number" id="snfRatePerSnf" class="form-control" step="0.01" min="0" disabled>
+                </div>
+            </div>
 
             <!-- Total Amount -->
             <div class="form-row">
@@ -104,11 +116,15 @@
                 </div>
             </div>
 
-            <!-- Shift (auto, button style) -->
+            <!-- Shift Selection (Radio Buttons with Auto Move) -->
             <div class="form-row">
                 <div class="form-group">
-                    <label>🌞/🌙 ਸ਼ਿਫਟ:</label>
-                    <button id="shiftDisplay" class="btn shift-btn" disabled>ਸਵੇਰ (Morning)</button>
+                    <label>🌞/🌙 ਸ਼ਿਫਟ (ਚੁਣੋ)</label>
+                    <div class="radio-group" style="margin-bottom: 0.5rem;">
+                        <label><input type="radio" name="shiftChoice" value="morning" checked> ਸਵੇਰ (Morning)</label>
+                        <label><input type="radio" name="shiftChoice" value="evening"> ਸ਼ਾਮ (Evening)</label>
+                    </div>
+                    <input type="text" id="shiftDisplay" class="form-control" readonly placeholder="ਚੁਣੀ ਹੋਈ ਸ਼ਿਫਟ">
                 </div>
             </div>
 
@@ -154,7 +170,7 @@
                     <label><input type="checkbox" id="includeBuffalo" checked> ਮੱਝ</label>
                     <label><input type="checkbox" id="includeCow" checked> ਗਾਂ</label>
                 </div>
-                <button id="generatePdfBtn" class="btn btn-sm" style="margin-top:1rem;">PDF ਬਣਾਓ</button>
+                <button id="downloadPdfBtn" class="btn btn-primary" style="margin-top:1rem;">📄 PDF ਡਾਊਨਲੋਡ ਕਰੋ</button>
             </div>
         </div>
 
@@ -216,6 +232,17 @@
                         <div style="flex:1;">
                             <label for="cowFatRate">ਗਾਂ ਫੈਟ ਰੇਟ (₹/ਫੈਟ):</label>
                             <input type="number" id="cowFatRate" class="form-control" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    <!-- SNF Rate for Cow -->
+                    <div class="form-row" style="gap: 1rem; margin-top: 10px;">
+                        <div style="flex:1;">
+                            <label for="cowSnfRate">ਗਾਂ SNF ਰੇਟ (₹/SNF):</label>
+                            <input type="number" id="cowSnfRate" class="form-control" step="0.01" min="0" value="5.00"
+                                required>
+                        </div>
+                        <div style="flex:1;">
+                            <!-- Empty column for spacing -->
                         </div>
                     </div>
 
@@ -280,9 +307,9 @@
     <!-- Scripts -->
     <script src="../assets/script.js"></script>
     <script src="../assets/dashboard.js"></script>
+    <script src="pakkaSettings.js"></script>
     <script src="pakka_logic.js"></script>
     <script src="pakkaPdf.js"></script>
-    <script src="pakkaSettings.js"></script>
     <script>
         // Settings button click listener
         document.getElementById('settingsBtn').addEventListener('click', function () {
