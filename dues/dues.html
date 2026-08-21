@@ -27,11 +27,11 @@
             <h2>🔍 ਫਿਲਟਰ (ਤਾਰੀਖ਼ ਰੇਂਜ)</h2>
             <div class="filters-grid">
                 <div class="filter-group">
-                    <label>ਤੋਂ</label>
+                    <label for="filterStart">ਤੋਂ</label>
                     <input type="date" id="filterStart" class="form-control">
                 </div>
                 <div class="filter-group">
-                    <label>ਤੱਕ</label>
+                    <label for="filterEnd">ਤੱਕ</label>
                     <input type="date" id="filterEnd" class="form-control">
                 </div>
                 <div class="filter-actions">
@@ -45,16 +45,25 @@
         <div class="card expense-form">
             <h2>📝 ਨਵਾਂ ਖਰਚਾ</h2>
             <div class="form-row">
-                <div class="form-group"><label>📅 ਤਾਰੀਖ਼</label><input type="date" id="expenseDate"
-                        class="form-control"></div>
-                <div class="form-group"><label>💰 ਰਕਮ (₹)</label><input type="number" id="expenseAmount"
-                        class="form-control" step="0.01"></div>
+                <div class="form-group">
+                    <label for="expenseDate">📅 ਤਾਰੀਖ਼</label>
+                    <input type="date" id="expenseDate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="expenseAmount">💰 ਰਕਮ (₹)</label>
+                    <input type="number" id="expenseAmount" class="form-control" step="0.01" min="0" inputmode="decimal"
+                        required>
+                </div>
             </div>
             <div class="form-row">
-                <div class="form-group"><label>📦 ਸਮਾਨ / ਕੰਮ</label><input type="text" id="expenseItem"
-                        class="form-control"></div>
-                <div class="form-group"><label>📝 ਵੇਰਵਾ (ਚਾਹਵੋ)</label><input type="text" id="expenseNote"
-                        class="form-control"></div>
+                <div class="form-group">
+                    <label for="expenseItem">📦 ਸਮਾਨ / ਕੰਮ</label>
+                    <input type="text" id="expenseItem" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="expenseNote">📝 ਵੇਰਵਾ (ਚਾਹਵੋ)</label>
+                    <input type="text" id="expenseNote" class="form-control">
+                </div>
             </div>
             <div class="form-actions">
                 <button id="saveExpenseBtn" class="btn btn-primary">➕ ਖਰਚਾ ਸੇਵ ਕਰੋ</button>
@@ -95,8 +104,9 @@
     </main>
 
     <div id="footer-placeholder"></div>
+
+    <!-- ✅ dashboard.js ਹਟਾਇਆ ਗਿਆ ਹੈ -->
     <script src="../assets/script.js"></script>
-    <script src="../assets/dashboard.js"></script>
     <script src="dues.js"></script>
 </body>
 
