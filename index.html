@@ -43,21 +43,21 @@
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="components/marquee.css">
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-7Q4H10B7KV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7Q4H10B7KV"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-  // Check if running on local file system or actual domain
-  if (location.protocol === 'file:') {
-    gtag('config', 'G-7Q4H10B7KV', {
-      'client_storage': 'none' // local testing ਵੇਲੇ ਕੂਕੀ ਬਣਾਉਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਨਹੀਂ ਕਰੇਗਾ
-    });
-  } else {
-    gtag('config', 'G-7Q4H10B7KV');
-  }
-</script>
+        // Check if running on local file system or actual domain
+        if (location.protocol === 'file:') {
+            gtag('config', 'G-7Q4H10B7KV', {
+                'client_storage': 'none' // local testing ਵੇਲੇ ਕੂਕੀ ਬਣਾਉਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਨਹੀਂ ਕਰੇਗਾ
+            });
+        } else {
+            gtag('config', 'G-7Q4H10B7KV');
+        }
+    </script>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -208,10 +208,30 @@
         // 5. Helper functions for modal (Global Scope)
         window.copyEmail = function () {
             const email = 'kjaspal483@gmail.com';
-            navigator.clipboard.writeText(email)
-                .then(() => alert('ਈਮੇਲ ਕਾਪੀ ਹੋ ਗਈ!'))
-                .catch(() => alert('ਕਾਪੀ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ, ਕਿਰਪਾ ਕਰਕੇ ਹੱਥੀਂ ਕਾਪੀ ਕਰੋ।'));
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(email)
+                    .then(() => alert('ਈਮੇਲ ਕਾਪੀ ਹੋ ਗਈ!'))
+                    .catch(() => fallbackCopyEmail(email));
+            } else {
+                fallbackCopyEmail(email);
+            }
         };
+
+        function fallbackCopyEmail(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert('ਈਮੇਲ ਕਾਪੀ ਹੋ ਗਈ!');
+            } catch (err) {
+                alert('ਕਾਪੀ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ, ਹੱਥੀਂ ਕਾਪੀ ਕਰੋ: ' + text);
+            }
+            document.body.removeChild(textArea);
+        }
 
         window.closeModal = function () {
             const modal = document.getElementById('contactModal');
@@ -229,4 +249,5 @@
         });
     </script>
 </body>
+
 </html>
