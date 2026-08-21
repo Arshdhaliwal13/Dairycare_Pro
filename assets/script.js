@@ -2,7 +2,7 @@
 
 // 🎯 GitHub Pages ਅਤੇ Localhost ਲਈ ਸਹੀ ਪਾਥ
 const isGH = window.location.hostname.includes("github.io");
-const swPath = isGH ? '/DairyCare_Pro/sw.js' : '/sw.js';
+const swPath = isGH ? '/Dairycare_Pro/sw.js' : '/sw.js';
 
 // Register Service Worker
 if ('serviceWorker' in navigator) {
