@@ -2,7 +2,7 @@
 
 // 🎯 GitHub Pages ਅਤੇ Localhost ਲਈ ਸਹੀ ਪਾਥ
 const isGH = window.location.hostname.includes("github.io");
-const swPath = isGH ? '/Dairycare_Pro/sw.js' : '/sw.js';
+const swPath = isGH ? '/DairyCare_Pro/sw.js' : '/sw.js';
 
 // Register Service Worker
 if ('serviceWorker' in navigator) {
@@ -74,7 +74,8 @@ async function checkForManualUpdate() {
         registration.waiting.postMessage({ type: 'SKIP_WAITING' });
       } else if (attempts >= 20) {
         clearInterval(checkWaiting);
-        alert('No update available or update taking too long. Try again later.');
+        // ✅ Fixed: Clear message when no update is available
+        alert('ਤੁਹਾਡੀ ਐਪ ਪਹਿਲਾਂ ਹੀ ਲੇਟੈਸਟ ਵਰਜ਼ਨ (v' + APP_VERSION + ') ਤੇ ਹੈ।');
       }
       attempts++;
     }, 100);
@@ -84,15 +85,16 @@ async function checkForManualUpdate() {
   }
 }
 
-// Event delegation for dynamic button
+// Event delegation for dynamic button (fixed with closest)
 document.addEventListener('click', async (event) => {
-  if (event.target.id === 'checkUpdateBtn') {
+  // ✅ Fixed: Use closest to handle clicks on icons/spans inside the button
+  if (event.target.closest('#checkUpdateBtn')) {
     await checkForManualUpdate();
   }
 });
 
 // Version display (sync with sw.js)
-const APP_VERSION = 'v7.6';
+const APP_VERSION = 'v5.0';
 
 let versionRetryCount = 0;
 const MAX_RETRIES = 20;
