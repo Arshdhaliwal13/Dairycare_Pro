@@ -308,3 +308,67 @@ main {
         font-size: 0.85rem;
     }
 }
+
+/* Header Layout Fix */
+.site-header {
+    background: linear-gradient(135deg, #2d6a4f, #40916c);
+    color: white;
+    padding: 0.6rem 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-flex {
+    display: flex;
+    justify-content: space-between; /* Left, Center, Right ਅਲੱਗ-ਅਲੱਗ ਕਰਨ ਲਈ */
+    align-items: center;
+    width: 100%;
+}
+
+/* Left - Logo */
+.logo {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.logo a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.15rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
+
+/* Center - Home Button */
+.header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+/* Right - Version */
+.header-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Mobile Screen Adjustments */
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 1rem; /* ਮੋਬਾਈਲ 'ਤੇ ਟੈਕਸਟ ਸਹੀ ਫਿੱਟ ਰਹੇ */
+    }
+
+    .btn-home {
+        padding: 5px 12px;
+        font-size: 0.85rem;
+    }
+
+    .version-badge {
+        padding: 3px 8px;
+        font-size: 0.65rem;
+    }
+}
