@@ -105,17 +105,43 @@
 
     <div id="footer-placeholder"></div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            if (typeof loadComponents === "function") {
-                loadComponents();
-            }
-        });
-    </script>
-
     <!-- ✅ dashboard.js ਹਟਾਇਆ ਗਿਆ ਹੈ -->
     <script src="../assets/script.js"></script>
     <script src="dues.js"></script>
+
+    <!-- Component Loader for dues.html -->
+    <script>
+        async function loadDuesComponents() {
+            // subfolder (dues/) ਵਿੱਚ ਹੋਣ ਕਰਕੇ path '../' ਰਹੇਗਾ
+            const basePath = '../';
+            const components = [
+                { id: 'header-placeholder', url: `${basePath}components/header.html` },
+                { id: 'footer-placeholder', url: `${basePath}components/footer.html` }
+            ];
+
+            for (const comp of components) {
+                const elem = document.getElementById(comp.id);
+                if (!elem) continue;
+
+                try {
+                    const response = await fetch(comp.url);
+                    if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+                    elem.innerHTML = await response.text();
+                } catch (error) {
+                    console.warn(`Fallback for ${comp.id}:`, error);
+                    if (comp.id === 'header-placeholder') {
+                        elem.innerHTML = `<header style="background: linear-gradient(135deg, #1e4d2b, #2a9d8f); color: white; padding: 1.2rem; text-align: center; font-size: 24px; font-weight: bold;">🐄 DairyCare Pro</header>`;
+                    } else if (comp.id === 'footer-placeholder') {
+                        elem.innerHTML = `<footer style="background: #1e293b; color: #cbd5e1; text-align: center; padding: 1.5rem; margin-top: 2rem;">Developed by Arshdeep Singh © 2026</footer>`;
+                    }
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadDuesComponents);
+    </script>
+</body>
+
 </body>
 
 </html>
