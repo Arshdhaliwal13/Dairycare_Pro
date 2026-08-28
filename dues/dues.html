@@ -105,6 +105,14 @@
 
     <div id="footer-placeholder"></div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof loadComponents === "function") {
+                loadComponents();
+            }
+        });
+    </script>
+
     <!-- ✅ dashboard.js ਹਟਾਇਆ ਗਿਆ ਹੈ -->
     <script src="../assets/script.js"></script>
     <script src="dues.js"></script>
