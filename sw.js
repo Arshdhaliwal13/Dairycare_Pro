@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dairycare-v7.8'; // 👑 Cache Version Updated
+const CACHE_NAME = 'dairycare-v7.9'; // 👑 Cache Version Updated
 const isGH = self.location.hostname.includes('github.io');
 const BASE_PATH = isGH ? '/Dairycare_Pro/' : '/';
 
