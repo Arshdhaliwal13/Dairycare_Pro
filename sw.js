@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dairycare-v7.7';
+const CACHE_NAME = 'dairycare-v7.7'; // 👑 Cache Version Updated
 const isGH = self.location.hostname.includes('github.io');
 const BASE_PATH = isGH ? '/Dairycare_Pro/' : '/';
 
@@ -10,6 +10,14 @@ const urlsToCache = [
   `${BASE_PATH}kacha_hisab/kacha.html`,
   `${BASE_PATH}reports/reports.html`,
   `${BASE_PATH}dues/dues.html`,
+
+  // 👑 mini_dairy ਫੋਲਡਰ ਦੀਆਂ ਨਵੀਆਂ ਫਾਈਲਾਂ ਸ਼ਾਮਲ ਕੀਤੀਆਂ ਗਈਆਂ ਨੇ
+  `${BASE_PATH}mini_dairy/owner.html`,
+  `${BASE_PATH}mini_dairy/owner.css`,
+  `${BASE_PATH}mini_dairy/owner.js`,
+  `${BASE_PATH}mini_dairy/ownerSettings.js`,
+  `${BASE_PATH}mini_dairy/ownerPdf.js`,
+
   `${BASE_PATH}assets/style.css`,
   `${BASE_PATH}assets/script.js`,
   `${BASE_PATH}assets/dashboard.js`,
@@ -36,7 +44,6 @@ self.addEventListener('install', event => {
 
 // Fetch Event – Stale-While-Revalidate (best for updates)
 self.addEventListener('fetch', event => {
-  // 👑 ਆਹ ਲਾਈਨਾਂ ਇੱਥੇ ਐਡ ਹੋ ਗਈਆਂ ਨੇ
   if (event.request.method !== 'GET' || event.request.url.includes('translate.googleapis.com')) {
     return; // ਇਹਨੂੰ ਸਿੱਧਾ ਨੈੱਟ 'ਤੇ ਜਾਣ ਦਿਓ, ਕੈਸ਼ੇ ਬਾਕਸ ਵਿੱਚ ਨਾ ਪਾਓ
   }
