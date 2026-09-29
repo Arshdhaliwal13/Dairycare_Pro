@@ -1,86 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <!-- 1. ਮੇਨ ਹੋਮ ਪੇਜ (Homepage) – ਸਿਰਫ਼ ਰੂਟ URL -->
     <url>
         <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/</loc>
-        <lastmod>2026-07-05</lastmod>
+        <lastmod>2026-09-29</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
-
-    <!-- 2. ਪੱਕਾ ਹਿਸਾਬ ਮੋਡੀਊਲ -->
     <url>
         <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/pakka_hisab/pakka.html</loc>
-        <lastmod>2026-07-05</lastmod>
+        <lastmod>2026-09-29</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-
-    <!-- 3. ਕੱਚਾ ਹਿਸਾਬ ਮੋਡੀਊਲ -->
     <url>
         <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/kacha_hisab/kacha.html</loc>
-        <lastmod>2026-07-05</lastmod>
+        <lastmod>2026-09-29</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-
-    <!-- 4. ਰਿਪੋਰਟਾਂ (Reports) -->
     <url>
         <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/reports/reports.html</loc>
-        <lastmod>2026-07-05</lastmod>
+        <lastmod>2026-09-29</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-
-    <!-- 5. ਖਰਚਾ ਹਿਸਾਬ (Dues) -->
     <url>
         <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/dues/dues.html</loc>
-        <lastmod>2026-07-05</lastmod>
+        <lastmod>2026-09-29</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-
-    <!-- 6. ਯੂਜ਼ਰ ਗਾਈਡ (User Guide) -->
     <url>
-        <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/guide.html</loc>
-        <lastmod>2026-07-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <!-- 7. ਡੋਨੇਸ਼ਨ ਪੇਜ (Donate) -->
-    <url>
-        <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/donate.html</loc>
-        <lastmod>2026-07-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-    </url>
-
-    <!-- 8. ਲੀਗਲ ਪੰਨੇ -->
-    <url>
-        <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/legal/privacy.html</loc>
-        <lastmod>2026-07-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.4</priority>
-    </url>
-    <url>
-        <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/legal/about.html</loc>
-        <lastmod>2026-07-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.4</priority>
-    </url>
-    <url>
-        <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/legal/terms.html</loc>
-        <lastmod>2026-07-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.4</priority>
-    </url>
-        <url>
         <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/mini_dairy/owner.html</loc>
         <lastmod>2026-09-29</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
-
-    <!-- 💡 ਨੋਟ: ਜੇਕਰ contact.html ਵਰਗਾ ਕੋਈ ਹੋਰ ਪੇਜ ਹੈ, ਤਾਂ ਉਸਨੂੰ ਵੀ ਇੱਥੇ ਜੋੜ ਲਓ -->
+    <url>
+        <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/guide.html</loc>
+        <lastmod>2026-09-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/donate.html</loc>
+        <lastmod>2026-09-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/legal/privacy.html</loc>
+        <lastmod>2026-09-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/legal/about.html</loc>
+        <lastmod>2026-09-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    <url>
+        <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/legal/terms.html</loc>
+        <lastmod>2026-09-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.4</priority>
+    </url>
 </urlset>
