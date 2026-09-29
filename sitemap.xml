@@ -75,6 +75,12 @@
         <changefreq>monthly</changefreq>
         <priority>0.4</priority>
     </url>
+        <url>
+        <loc>https://arshdhaliwal13.github.io/Dairycare_Pro/mini_dairy/owner.html</loc>
+        <lastmod>2026-09-29</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
 
     <!-- 💡 ਨੋਟ: ਜੇਕਰ contact.html ਵਰਗਾ ਕੋਈ ਹੋਰ ਪੇਜ ਹੈ, ਤਾਂ ਉਸਨੂੰ ਵੀ ਇੱਥੇ ਜੋੜ ਲਓ -->
 </urlset>
