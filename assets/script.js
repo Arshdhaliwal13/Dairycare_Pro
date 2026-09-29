@@ -1,13 +1,14 @@
 // assets/script.js – Offline + Daily Refresh + Optimized
 
-// 🎯 GitHub Pages ਅਤੇ Localhost ਲਈ ਸਹੀ ਪਾਥ
+// 🎯 GitHub Pages ਅਤੇ Localhost ਲਈ ਸਹੀ ਪਾਥ + scope
 const isGH = window.location.hostname.includes("github.io");
 const swPath = isGH ? '/Dairycare_Pro/sw.js' : '/sw.js';
+const swScope = isGH ? '/Dairycare_Pro/' : '/';
 
 // Register Service Worker
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register(swPath)
-    .then(reg => console.log('SW registered successfully on path:', swPath))
+  navigator.serviceWorker.register(swPath, { scope: swScope })
+    .then(reg => console.log('SW registered successfully on path:', swPath, '| scope:', swScope))
     .catch(err => console.error('SW registration failed:', err));
 }
 
