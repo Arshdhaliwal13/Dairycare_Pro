@@ -85,6 +85,20 @@ async function checkForManualUpdate() {
   }
 }
 
+// ==================== GLOBAL NAVIGATION (Footer Links) ====================
+window.getAppBasePath = function () {
+  const isGH = window.location.hostname.includes('github.io');
+  return isGH ? '/Dairycare_Pro/' : '/';
+};
+
+window.navigateLegal = function (page) {
+  window.location.href = window.location.origin + window.getAppBasePath() + 'legal/' + page;
+};
+
+window.navigateRoot = function (page) {
+  window.location.href = window.location.origin + window.getAppBasePath() + page;
+};
+
 // Event delegation for dynamic button (fixed with closest)
 document.addEventListener('click', async (event) => {
   // ✅ Fixed: Use closest to handle clicks on icons/spans inside the button
@@ -94,7 +108,7 @@ document.addEventListener('click', async (event) => {
 });
 
 // Version display (sync with sw.js)
-const APP_VERSION = 'v7.9';
+const APP_VERSION = 'v7.6';
 
 let versionRetryCount = 0;
 const MAX_RETRIES = 20;
