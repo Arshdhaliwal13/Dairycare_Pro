@@ -2,19 +2,6 @@
 // Developed by Arshdeep Singh © 2026
 
 // ==================== 1. GLOBAL FUNCTIONS (Defined First) ====================
-// 🎯 Base path for GitHub Pages vs Localhost
-window.getAppBasePath = function () {
-    const isGH = window.location.hostname.includes('github.io');
-    return isGH ? '/Dairycare_Pro/' : '/';
-};
-
-window.navigateLegal = function (page) {
-    window.location.href = window.location.origin + window.getAppBasePath() + 'legal/' + page;
-};
-
-window.navigateRoot = function (page) {
-    window.location.href = window.location.origin + window.getAppBasePath() + page;
-};
 
 // ==================== 2. COMPONENT LOADER (With Script Support) ====================
 async function loadComponent(elementId, filePath) {
@@ -67,7 +54,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 🔥 Now safely call getAppBasePath (because it's defined at top)
-    const base = window.getAppBasePath();
+    const base = (typeof window.getAppBasePath === 'function')
+        ? window.getAppBasePath()
+        : (window.location.hostname.includes('github.io') ? '/Dairycare_Pro/' : '/');
     await loadComponent('header-placeholder', `${base}components/header.html`);
     await loadComponent('footer-placeholder', `${base}components/footer.html`);
 });
