@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dairycare-v8.0'; // 👑 Cache Version Updated
+const CACHE_NAME = 'dairycare-v7.7'; // 👑 Cache Version Updated
 const isGH = self.location.hostname.includes('github.io');
 const BASE_PATH = isGH ? '/Dairycare_Pro/' : '/';
 
@@ -24,6 +24,10 @@ const urlsToCache = [
   `${BASE_PATH}components/header.html`,
   `${BASE_PATH}components/footer.html`,
   `${BASE_PATH}components/marquee.html`
+
+  `${BASE_PATH}assets/backup.js`,
+  `${BASE_PATH}manifest.json`,
+  `${BASE_PATH}guide.html`,
 ];
 
 // Install Event – cache essential files
